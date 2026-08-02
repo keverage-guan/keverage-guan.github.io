@@ -9,8 +9,7 @@ author:
   github: keverage-guan
 
 description: >
-  Kevin Guan — [department / program] at Princeton University. Research on
-  [your topic]. Publications, courses, CV, and contact information.
+  Kevin Guan — Publications, courses, CV, and contact information.
 
 # Set this to your live URL. For a user site (keverage-guan.github.io) leave
 # baseurl empty. For a project site, set baseurl: "/repo-name".
@@ -21,7 +20,7 @@ baseurl: ""
 # Build settings
 # --------------
 
-remote_theme: jekyll/minima@d4d779a
+remote_theme: jekyll/minima@4de322363fca5927e6f4012cb94f6dad69ab5e6c
 
 plugins:
   - jekyll-feed

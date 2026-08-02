@@ -5,15 +5,15 @@ permalink: /cv/
 ---
 
 <p>
-  <a class="button" href="{{ '/assets/pdf/kevin-guan-cv.pdf' | relative_url }}">
+  <a class="button" href="{{ '/assets/pdf/kevin_guan_cv.pdf' | relative_url }}">
     Download CV (PDF)
   </a>
   <span class="cv-updated">Last updated July 2026</span>
 </p>
 
 <object class="cv-embed"
-        data="{{ '/assets/pdf/kevin-guan-cv.pdf' | relative_url }}"
+        data="{{ '/assets/pdf/kevin_guan_cv.pdf' | relative_url }}"
         type="application/pdf">
   <p>Your browser can't display the PDF inline.
-     <a href="{{ '/assets/pdf/kevin-guan-cv.pdf' | relative_url }}">Download it instead.</a></p>
+     <a href="{{ '/assets/pdf/kevin_guan_cv.pdf' | relative_url }}">Download it instead.</a></p>
 </object>
