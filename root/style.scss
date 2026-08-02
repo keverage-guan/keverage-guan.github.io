@@ -1,0 +1,202 @@
+---
+# Empty front matter is required so Jekyll processes this file.
+---
+
+@import
+  "minima/skins/{{ site.minima.skin | default: 'classic' }}",
+  "minima/initialize";
+
+/* ---------------------------------------------------------------
+   Custom styles. Everything above this line is Minima's own CSS.
+   --------------------------------------------------------------- */
+
+/* Profile photo — floats beside the bio on wide screens, stacks on mobile */
+.profile-photo {
+  float: right;
+  width: 200px;
+  max-width: 40%;
+  margin: 0 0 $spacing-unit $spacing-unit;
+  border-radius: 4px;
+}
+
+@media screen and (max-width: 600px) {
+  .profile-photo {
+    float: none;
+    display: block;
+    width: 160px;
+    max-width: 60%;
+    margin: 0 auto $spacing-unit;
+  }
+}
+
+/* Updates list on the home page */
+.updates {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.update {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25em 1em;
+  padding: 0.4em 0;
+  border-bottom: 1px solid $border-color-01;
+
+  &:last-child { border-bottom: 0; }
+}
+
+.update-date {
+  flex: 0 0 8.5em;
+  font-variant-numeric: tabular-nums;
+  color: $brand-color;
+  font-size: $small-font-size;
+  padding-top: 0.15em;
+}
+
+.update-text { flex: 1 1 16em; }
+
+/* Publications */
+.pub-list {
+  list-style: none;
+  margin-left: 0;
+  padding-left: 0;
+}
+
+.pub {
+  padding: 0 0 $spacing-unit * 0.6 0;
+  margin-bottom: $spacing-unit * 0.6;
+  border-bottom: 1px solid $border-color-01;
+
+  &:last-child { border-bottom: 0; }
+}
+
+.pub-title {
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.pub-authors,
+.pub-venue,
+.pub-note {
+  font-size: $small-font-size;
+  line-height: 1.5;
+}
+
+.pub-venue { font-style: italic; }
+
+.pub-note,
+.pub-footnote {
+  color: $brand-color;
+  font-size: $small-font-size;
+}
+
+.pub-links {
+  margin-top: 0.4em;
+
+  a {
+    display: inline-block;
+    margin-right: 0.4em;
+    padding: 0.1em 0.55em;
+    font-size: $small-font-size;
+    border: 1px solid $border-color-02;
+    border-radius: 3px;
+    text-decoration: none;
+
+    &:hover {
+      border-color: $link-base-color;
+      text-decoration: none;
+    }
+  }
+}
+
+/* Courses */
+.course-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: $spacing-unit;
+
+  td {
+    padding: 0.45em 0.6em 0.45em 0;
+    border: 0;
+    border-bottom: 1px solid $border-color-01;
+    vertical-align: top;
+  }
+}
+
+.course-code {
+  white-space: nowrap;
+  font-weight: 600;
+  width: 6.5em;
+}
+
+.course-term {
+  white-space: nowrap;
+  text-align: right;
+  color: $brand-color;
+  font-size: $small-font-size;
+}
+
+.course-note {
+  color: $brand-color;
+  font-size: $small-font-size;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0 0.4em;
+  font-size: 0.7em;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  border: 1px solid $border-color-02;
+  border-radius: 3px;
+  vertical-align: 0.15em;
+}
+
+/* CV page */
+.button {
+  display: inline-block;
+  padding: 0.4em 0.9em;
+  border: 1px solid $border-color-02;
+  border-radius: 4px;
+  text-decoration: none;
+
+  &:hover {
+    border-color: $link-base-color;
+    text-decoration: none;
+  }
+}
+
+.cv-updated {
+  margin-left: 0.6em;
+  font-size: $small-font-size;
+  color: $brand-color;
+}
+
+.cv-embed {
+  width: 100%;
+  height: 80vh;
+  min-height: 500px;
+  border: 1px solid $border-color-01;
+}
+
+@media screen and (max-width: 600px) {
+  .cv-embed { display: none; }
+}
+
+/* Contact page */
+.contact-list {
+  dt {
+    font-weight: 600;
+    margin-top: 0.8em;
+  }
+
+  dd {
+    margin-left: 0;
+  }
+}
+
+.page-intro {
+  color: $brand-color;
+  font-size: $small-font-size;
+}

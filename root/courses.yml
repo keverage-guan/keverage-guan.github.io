@@ -1,0 +1,87 @@
+# Grouped by area. Reorder the groups however you like — the page follows this order.
+#
+#   level: graduate   -> adds a small "grad" tag next to the title (omit otherwise)
+#   url:              -> optional link to the course page or syllabus
+#   note:             -> optional one-liner (e.g. "final project on X", "audited")
+
+- category: Computer Science
+  courses:
+    - code: COS 435 / ECE 433
+      title: Reinforcement Learning
+      term: Spring 2026
+    - code: COS 585
+      title: Information Theory
+      term: Fall 2025
+      level: graduate
+    - code: COS 487
+      title: Theory of Computation
+      term: Fall 2025
+    - code: CEE 520 / COS 520
+      title: Graph Learning
+      term: Spring 2025
+      level: graduate
+    - code: ECE 435
+      title: Machine Learning and Pattern Recognition
+      term: Fall 2024
+    - code: COS 226
+      title: Algorithms and Data Structures
+      term: Spring 2024
+
+- category: Mathematics and Statistics
+  courses:
+    - code: MAT 520
+      title: Functional Analysis
+      level: graduate
+    - code: MAT 529
+      title: Probability in High Dimensions
+      term: Spring 2026
+      level: graduate
+    - code: MAT 478
+      title: Probabilistic Methods in Combinatorics
+      term: Spring 2026
+    - code: ORF 526
+      title: Probability Theory
+      term: Fall 2025
+      level: graduate
+    - code: MAT 330
+      title: Complex Analysis
+      term: Spring 2025
+    - code: MAT 345
+      title: Abstract Algebra
+      term: Fall 2024
+    - code: MAT 217
+      title: Honors Linear Algebra
+      term: Spring 2024
+    - code: MAT 215
+      title: Single Variable Analysis
+      term: Fall 2023
+
+- category: Cognitive Science and Linguistics
+  courses:
+    - code: LIN 302
+      title: Syntax
+      term: Fall 2026 (current)
+    - code: LIN 209
+      title: Language and Music
+      term: Fall 2026 (current)
+    - code: ECE 480 / NEU 480 / PSY480
+      title: fMRI Decoding
+      term: Spring 2026
+    - code: LIN 306
+      title: Morphology
+      term: Spring 2026
+    - code: LIN 321
+      title: Prosody in Spoken Language
+      term: Fall 2025
+    - code: LIN 201
+      title: Introduction to Linguistics
+      term: Spring 2024
+
+- category: Other
+  courses:
+    - code: CBE 422
+      title: Molecular Modeling Methods
+      term: Fall 2026 (current)
+    - code: PHY 208
+      title: Principles of Quantum Mechanics
+      term: Spring 2025

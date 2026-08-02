@@ -1,0 +1,43 @@
+- title: "Evaluating Architectures on High and Low-Resource Languages"
+  authors:
+    - Kevin Guan
+    - Happy Buzaaba
+    - Christiane Fellbaum
+  venue: "Language Technologies for Low-Resource Languages (LaTeLL)"
+  year: 2026
+  status: preprint
+  note: "Accepted to LaTeLL 2026"
+  arxiv: "https://arxiv.org/abs/2605.02608"
+
+- title: "AfriSUD: A Dependency Treebank Collection for Evaluating Models on African Languages"
+  authors:
+    - Happy Buzaaba
+    - Cheikh Mouhamadou Bamba Dione
+    - David Ifeoluwa Adelani
+    - Sylvain Kahane
+    - Kim Gerdes
+    - Bruno Guillaume
+    - Kevin Guan
+    - Aremu Anuoluwapo
+    - Naome A. Etori
+    - Shamsuddeen Hassan Muhammad
+    - Utitofon Inyang
+    - Peter Nabende
+    - David Sabiiti Bamutura
+    - Andiswa Bukula
+    - Chinedu Uchechukwu
+    - Rooweither Mabuya
+    - Idris Akinade
+    - Christiane Fellbaum
+  venue: "Submitted to EMNLP 2026"
+  year: 2026
+  status: preprint
+  arxiv: "https://arxiv.org/abs/2606.12708"
+
+- title: "Recovering the Temporal Structure of Drifting Data from Model Weights"
+  authors:
+    - Kevin Guan
+  venue: "Submitted to Transactions on Machine Learning Research (TMLR)"
+  year: 2026
+  status: preprint
+  arxiv: "https://arxiv.org/abs/2607.27482"
