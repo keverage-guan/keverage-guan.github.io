@@ -9,7 +9,7 @@ author:
   github: keverage-guan
 
 description: >
-  Kevin Guan — Publications, courses, CV, and contact information.
+  Kevin Guan — Papers, courses, CV, and contact information.
 
 # Set this to your live URL. For a user site (keverage-guan.github.io) leave
 # baseurl empty. For a project site, set baseurl: "/repo-name".
@@ -44,7 +44,7 @@ minima:
 
   # Order of the links in the site navigation
   nav_pages:
-    - publications.md
+    - papers.md
     - courses.md
     - cv.md
     - contact.md

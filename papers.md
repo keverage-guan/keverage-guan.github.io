@@ -1,26 +1,18 @@
 ---
 layout: page
-title: Publications
-permalink: /publications/
+title: Papers
+permalink: /papers/
 ---
 
 {%- comment -%}
-Everything on this page is generated from _data/publications.yml.
-Add entries there, not here. `status:` controls which section an entry lands in.
+Everything on this page is generated from _data/papers.yml.
+Add entries there, not here.
 {%- endcomment -%}
 
 {%- assign me = site.author.name -%}
-{%- assign sections = "published,preprint,inprep" | split: "," -%}
-{%- assign headings = "Publications,Preprints and manuscripts under review,In preparation" | split: "," -%}
-
-{%- for section in sections -%}
-{%- assign entries = site.data.publications | where: "status", section -%}
-{%- if entries.size > 0 %}
-
-## {{ headings[forloop.index0] }}
 
 <ol class="pub-list">
-{%- for pub in entries %}
+{%- for pub in site.data.papers %}
   <li class="pub">
     <div class="pub-title">{{ pub.title }}</div>
     <div class="pub-authors">
@@ -49,10 +41,8 @@ Add entries there, not here. `status:` controls which section an entry lands in.
   </li>
 {%- endfor %}
 </ol>
-{%- endif -%}
-{%- endfor %}
 
 <p class="pub-footnote">
-  <sup>*</sup> Also on
-  <a href="https://scholar.google.com/citations?user=YOUR_ID">Google Scholar</a>.
+  Also on
+  <a href="https://scholar.google.com/citations?user=evwugkIAAAAJ&hl">Google Scholar</a>.
 </p>
