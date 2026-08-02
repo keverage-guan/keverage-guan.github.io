@@ -53,6 +53,6 @@ Add entries there, not here. `status:` controls which section an entry lands in.
 {%- endfor %}
 
 <p class="pub-footnote">
-  <sup>*</sup> denotes equal contribution. A full list is also on
+  <sup>*</sup> Also on
   <a href="https://scholar.google.com/citations?user=YOUR_ID">Google Scholar</a>.
 </p>
