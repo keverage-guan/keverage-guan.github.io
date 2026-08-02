@@ -21,7 +21,7 @@ baseurl: ""
 # Build settings
 # --------------
 
-remote_theme: jekyll/minima@c6e74bb
+theme: minima
 
 plugins:
   - jekyll-feed
