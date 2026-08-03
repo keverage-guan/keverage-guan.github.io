@@ -5,6 +5,17 @@
   --hc-c1: #e8a33d;
   --hc-c2: #3aa6a0;
   --hc-c3: #6c63d8;
+
+  /* tints of the four category colours, for the axis bars */
+  --hc-c0-soft: rgba(214, 79, 110, 0.14);
+  --hc-c1-soft: rgba(232, 163, 61, 0.14);
+  --hc-c2-soft: rgba(58, 166, 160, 0.14);
+  --hc-c3-soft: rgba(108, 99, 216, 0.14);
+  --hc-c0-edge: rgba(214, 79, 110, 0.5);
+  --hc-c1-edge: rgba(232, 163, 61, 0.5);
+  --hc-c2-edge: rgba(58, 166, 160, 0.5);
+  --hc-c3-edge: rgba(108, 99, 216, 0.5);
+
   --hc-line: rgba(128, 128, 140, 0.35);
   --hc-soft: rgba(128, 128, 140, 0.10);
   --hc-warn: #b4682a;
@@ -65,9 +76,10 @@
   align-items: stretch;
 }
 
-/* once solved, an axis-label column and row appear around the tiles */
+/* solved: two label lanes appear on each axis, before the four tile tracks */
 .hc-board.is-labelled {
-  grid-template-columns: minmax(0, 7.5em) repeat(4, minmax(0, 1fr));
+  grid-template-columns: auto auto repeat(4, minmax(0, 1fr));
+  grid-template-rows: auto auto repeat(4, minmax(0, auto));
 }
 
 .hc-tile {
@@ -115,34 +127,36 @@
   border-color: var(--hc-warn);
 }
 
-/* axis labels ------------------------------------------------------------- */
+/* category bars ----------------------------------------------------------- */
 .hc-axis {
   display: flex;
-  font-size: 0.72rem;
-  line-height: 1.25;
-  opacity: 0;
-  transition: opacity 320ms ease 200ms;
-  word-break: break-word;
-  hyphens: auto;
-}
-
-.hc-axis.is-in { opacity: 0.75; }
-
-.hc-axis-col {
-  align-items: flex-end;
+  align-items: center;
   justify-content: center;
   text-align: center;
-  padding-bottom: 0.15rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.25;
+  border-radius: 6px;
+  border: 1px solid;
+  overflow-wrap: anywhere;
+  opacity: 0;
+  transition: opacity 320ms ease 200ms;
 }
+
+.hc-axis.is-in { opacity: 1; }
+
+.hc-axis-col { padding: 0.32rem 0.5rem; }
 
 .hc-axis-row {
-  align-items: center;
-  justify-content: flex-end;
-  text-align: right;
-  padding-right: 0.15rem;
+  padding: 0.5rem 0.32rem;
+  writing-mode: vertical-rl;
+  transform: rotate(180deg);
 }
 
-.hc-axis-corner { min-height: 1.5em; }
+.hc-axis.c0 { color: var(--hc-c0); background: var(--hc-c0-soft); border-color: var(--hc-c0-edge); }
+.hc-axis.c1 { color: var(--hc-c1); background: var(--hc-c1-soft); border-color: var(--hc-c1-edge); }
+.hc-axis.c2 { color: var(--hc-c2); background: var(--hc-c2-soft); border-color: var(--hc-c2-edge); }
+.hc-axis.c3 { color: var(--hc-c3); background: var(--hc-c3-soft); border-color: var(--hc-c3-edge); }
 
 /* the 4-bit readout ------------------------------------------------------- */
 .hc-bits { display: flex; gap: 3px; }
@@ -173,7 +187,7 @@
 
 .hc-board.is-done .hc-bit { cursor: default; }
 
-/* the note under the board, shown once the board becomes the cube --------- */
+/* the note under the board, shown once the board becomes the cube ---------- */
 .hc-cube-note {
   margin: 0;
   max-height: 0;

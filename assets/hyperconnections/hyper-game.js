@@ -10,8 +10,9 @@
   var REDUCED = !!(global.matchMedia &&
     global.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
-  var CUBE_NOTE = 'Neighbouring cells differ by exactly one category. Edges wrap ' +
-    'around, which is what makes this 4×4 grid a drawing of Q\u2084.';
+  var CUBE_NOTE = 'Each category covers half the board, and the two on each axis ' +
+    'overlap in the middle. Neighbouring cells differ by exactly one category — ' +
+    'edges wrap around, which is what makes this 4×4 grid a drawing of Q\u2084.';
 
   function el(tag, cls, txt) {
     var e = document.createElement(tag);
@@ -27,6 +28,17 @@
     }
     if (!n) return 'transparent';
     return 'rgba(' + Math.round(r / n) + ',' + Math.round(g / n) + ',' + Math.round(b / n) + ',0.16)';
+  }
+
+  /* Which of the four positions along an axis carry bit `b`.
+   * In Gray order these are always two adjacent positions, and the two bits
+   * overlap in exactly one of them — which is what the label bars show. */
+  function spanFor(b) {
+    var lo = 4, hi = -1;
+    for (var i = 0; i < 4; i++) {
+      if ((HC.GRAY[i] >> b) & 1) { if (i < lo) lo = i; if (i > hi) hi = i; }
+    }
+    return { lo: lo, hi: hi };
   }
 
   /* opts: { puzzle, mode: 'packed'|'plain', storeKey, demo: bool } */
@@ -283,8 +295,12 @@
       return g ? g.split(' ').filter(Boolean).length : 4;
     }
 
-    /* Slide the tiles into hypercube order (FLIP) and grow axis labels around
-     * them, so the board the player built becomes the drawing of Q4. */
+    /* Slide the tiles into hypercube order (FLIP) and draw the four category
+     * bars around them, each spanning the half of the board it covers.
+     *
+     * Grid layout once labelled: two label lanes then four tile tracks, on both
+     * axes, so tile (row, col) sits at grid row 3+row, grid column 3+col.
+     */
     function revealCube(t) {
       return new Promise(function (resolve) {
         var slots = new Array(16);
@@ -298,30 +314,41 @@
 
         var byIndex = {};
         tiles.forEach(function (tile) { byIndex[tile._index] = tile; });
-
-        var axes = [], kids = [];
-        function axis(cls, txt) {
-          var a = el('div', 'hc-axis ' + cls, txt);
-          axes.push(a); kids.push(a);
-        }
-        axis('hc-axis-corner', '');
-        for (var col = 0; col < 4; col++) {
-          axis('hc-axis-col', labelFor(HC.GRAY[col], [0, 1], t));
-        }
-        for (var row = 0; row < 4; row++) {
-          axis('hc-axis-row', labelFor(HC.GRAY[row], [2, 3], t));
-          for (var c2 = 0; c2 < 4; c2++) kids.push(byIndex[slots[row * 4 + c2]]);
-        }
-
         order = slots;
         tiles = order.map(function (i) { return byIndex[i]; });
-        kids.forEach(function (k) { board.appendChild(k); });
+
+        var bars = [];
+        function makeBar(cat, cls, lane, span) {
+          var b = el('div', 'hc-axis ' + cls + ' c' + cat, t.categories[cat]);
+          var track = (3 + span.lo) + ' / ' + (4 + span.hi);
+          if (cls === 'hc-axis-col') {
+            b.style.gridRow = String(lane + 1);
+            b.style.gridColumn = track;
+          } else {
+            b.style.gridColumn = String(lane + 1);
+            b.style.gridRow = track;
+          }
+          bars.push(b);
+          board.appendChild(b);
+        }
+
+        for (var k = 0; k < 2; k++) {
+          makeBar(k, 'hc-axis-col', k, spanFor(k));           // categories 1 and 2
+          makeBar(k + 2, 'hc-axis-row', k, spanFor(k));       // categories 3 and 4
+        }
+
+        tiles.forEach(function (tile, k) {
+          tile.style.gridRow = String(3 + Math.floor(k / 4));
+          tile.style.gridColumn = String(3 + (k % 4));
+          board.appendChild(tile);
+        });
+
         board.classList.add('is-labelled');
         note.textContent = CUBE_NOTE;
         note.classList.add('is-shown');
 
         if (REDUCED) {
-          axes.forEach(function (a) { a.classList.add('is-in'); });
+          bars.forEach(function (b) { b.classList.add('is-in'); });
           resolve();
           return;
         }
@@ -337,19 +364,13 @@
             tile.style.transition = 'transform 520ms cubic-bezier(.2,.7,.2,1)';
             tile.style.transform = '';
           });
-          axes.forEach(function (a) { a.classList.add('is-in'); });
+          bars.forEach(function (b) { b.classList.add('is-in'); });
           setTimeout(function () {
             tiles.forEach(function (tile) { tile.style.transition = ''; });
             resolve();
           }, 560);
         });
       });
-    }
-
-    function labelFor(pair, cats, t) {
-      var names = [];
-      for (var k = 0; k < 2; k++) if ((pair >> k) & 1) names.push(t.categories[cats[k]]);
-      return names.length ? names.join(' + ') : 'neither';
     }
 
     buildBoard();
