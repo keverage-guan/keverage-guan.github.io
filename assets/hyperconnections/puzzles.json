@@ -25,6 +25,106 @@
       "hash": "c2765705b7d3736aa1103d478335984b836d84a318acc8c2ca0b1eedb046fe91",
       "payload": "7twqPp6/GDkbQ7dQanvsXwjXQBl0F15eh/VR+YxrkUvUffvvd1ocEcodh0zxT4dg+EClmVd+3JifpOaCotRia+EMvXK4BWSthBv6jNAHFjiY8YOwre3BGBFby9g/hJbt8VN9KozFXQwwp3E=",
       "note": "A gentle one: all four categories are about spelling."
+    },
+    {
+      "id": 2,
+      "title": "Puzzle 2",
+      "words": [
+        "price",
+        "snow",
+        "meadow",
+        "tonicize",
+        "throat singing",
+        "ensemble",
+        "lagerphone",
+        "strength",
+        "snare drums",
+        "campfire",
+        "spiritlessness",
+        "staff",
+        "measure",
+        "entwine",
+        "haydn",
+        "namesake"
+      ],
+      "hash": "0fb6b97de95b1b289046652cc2a5a056c02099b7d0fdd98919d0ddc57dc35e4a",
+      "payload": "jxXewCcLMpGvjIG8vesilkhHlgdkcr2ugole7iSiJLbv7vuaf6VywFMp0dZj2LBw8V7m5hgUA2oX34YyjTxp1xd56gFnv6xuTGcdi7vw3WGOepZarHmPpVeDLkqPBzmg5gR/4X8MpFK5ErR1AN24zEmwd94vXAl67uN9LFlRGg==",
+      "note": "George Saintsbury probably has notes on this."
+    },
+    {
+      "id": 3,
+      "title": "Puzzle 3",
+      "words": [
+        "rome",
+        "madrid",
+        "ajmer",
+        "bogota",
+        "budapest",
+        "new york city",
+        "wellington",
+        "cannes",
+        "paris",
+        "canberra",
+        "seoul",
+        "hamburg",
+        "geneva",
+        "hanoi",
+        "barcelona",
+        "cairo"
+      ],
+      "hash": "b4cb275ffa4b486b88a622b17403145df2e60b5f12f83346c2b1cee5ade5d0a4",
+      "payload": "u8ZFyyiTflEPTrK3dNZ5stnnUaUvb0onVjZwxhgX7+ZbkMFZ0P3rnYyjCeEe4sFuWEU3H8tA7TOO7MTbWL9+72NzONgCm7Ix8RNdI7H9dlGVf6p5ovHV2sCRBeggnw/W44rIWLLHtIp9OXT/ZuPyo9oFjVyvYRhpCqTuj+/Fomnqf6d5tMfPltsvwEWEFukP9US3lnCmHwI=",
+      "note": "No shame in looking up cities."
+    },
+    {
+      "id": 4,
+      "title": "Puzzle 4",
+      "words": [
+        "diabetes",
+        "ob-gyn",
+        "gym",
+        "thyroid",
+        "nsync",
+        "anti-inflammatory",
+        "echo",
+        "b-boy",
+        "well-known",
+        "ligament",
+        "five-year-old",
+        "bell-shaped",
+        "hmong",
+        "hemodialysis",
+        "c-section",
+        "post-traumatic"
+      ],
+      "hash": "09436daf507a8d9518ac2f08a3afa4af4056c5545dc7d90bf3b62e47c0f54aa6",
+      "payload": "nFYIDK1pe8YhEPMNUtCMeKmXcUKH7vPCsQgceKBv5KulNQFJbuLMd/noVMidSnW2rNWQSpYEBAPgifQehRuCzxLoYf0ErbB5BkMFADo6uKpnIfIzqHRGj4sPPMbPIeyaZuzY7CisG/z9RGmiXYqjxmr1//x9BuUa+BW43M4qO8wgpeWxjX2LQOEDByzBde80vT0DBwY7",
+      "note": "Feeling positive about this one."
+    },
+    {
+      "id": 5,
+      "title": "Puzzle 5",
+      "words": [
+        "choir",
+        "boat",
+        "black sabbath",
+        "peter",
+        "supper",
+        "mohamed",
+        "frederick",
+        "riddle",
+        "harry",
+        "aaron",
+        "lunar",
+        "connor",
+        "knob",
+        "grass",
+        "jesus",
+        "isaac"
+      ],
+      "hash": "104324e4d6f826fd588b4ab4aadfe1ac73b22239d815492dee5b2e0ef0f1a740",
+      "payload": "8BVPsybMDcQfC3c/padDhmclld3IE2/k/cz1Qbth0XUwfRSmM87ae6J0Pgh3BwhsZfolVZNrON1+x4JbU/CqLQv/9w1UY88jDCCF9RF0thiMdBwez0+y7WmtDKRddJuCI0Y8WUJFUmepXw1SFlDZm9NXLrA2iUf2vcWbCmp2vc5sb/AdTtrrTYRpOirlcoeB67fZ",
+      "note": "I hope you're well-read!"
     }
   ]
 }
