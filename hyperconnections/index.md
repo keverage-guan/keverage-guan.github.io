@@ -31,4 +31,4 @@ When all sixteen patterns are different, check your answer.
 
 ---
 
-Your progress is kept in this browser only. I learned about this type of puzzle from [Jonah Stockwell's](https://jonahstockwell.com/).
+Your progress is kept in this browser only. I learned about this type of puzzle from [Jonah Stockwell](https://jonahstockwell.com/).
