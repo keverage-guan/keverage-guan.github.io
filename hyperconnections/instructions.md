@@ -8,8 +8,7 @@ description: The rules of Hyperconnections, with a worked example you can solve.
 In ordinary connections, the sixteen words split into disjoint groups of four. Every word belongs to exactly one group, and finding a group removes those words from play.
 
 Hyperconnections keeps the sixteen words and the four categories, and throws out the
-disjointness. Here, the categories bisect each other. Each category contains eight
-of the sixteen words. Any two categories share exactly four words. Any three share
+disjointness. Here, the categories bisect each other, so each category contains eight words. Any two categories share exactly four words. Any three share
 exactly two. All four share exactly one — and exactly one word belongs to none of them.
 
 Equivalent ways to describe these puzzles:

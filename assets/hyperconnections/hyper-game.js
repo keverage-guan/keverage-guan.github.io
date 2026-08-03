@@ -44,14 +44,17 @@
       var saved = JSON.parse(localStorage.getItem(storeKey) || 'null');
       if (saved && Array.isArray(saved.masks) && saved.masks.length === 16) {
         masks = saved.masks;
-        solved = !!saved.solved;
       }
     } catch (e) { /* storage unavailable; play without saving */ }
 
     function save() {
       try {
-        localStorage.setItem(storeKey, JSON.stringify({ masks: masks, solved: solved }));
+        localStorage.setItem(storeKey, JSON.stringify({ masks: masks }));
       } catch (e) { /* ignore */ }
+    }
+
+    function forget() {
+      try { localStorage.removeItem(storeKey); } catch (e) { /* ignore */ }
     }
 
     async function getTruth() {
@@ -91,8 +94,8 @@
     var btnCheck = el('button', 'hc-btn hc-btn-primary', 'Check answer');
     var btnClear = el('button', 'hc-btn', 'Clear board');
     var btnShuffle = el('button', 'hc-btn', 'Shuffle words');
-    var btnHint = el('button', 'hc-btn', 'See categories');
-    var btnGiveUp = el('button', 'hc-btn hc-btn-quiet', 'Show solution');
+    var btnHint = el('button', 'hc-btn', 'Get a hint');
+    var btnGiveUp = el('button', 'hc-btn hc-btn-quiet', 'See Categories');
     [btnCheck, btnClear, btnShuffle, btnHint, btnGiveUp].forEach(function (x) { bar.appendChild(x); });
     root.appendChild(bar);
 
@@ -228,6 +231,7 @@
 
     /* ---- endgame ---- */
     async function finish(how) {
+      forget();
       var t = await getTruth();
       var align = HC.align(masks, t.masks);
       for (var b = 0; b < 4; b++) {
@@ -238,7 +242,7 @@
         }
       }
       board.classList.add('is-done');
-      say(how === 'solved' ? 'Solved! Every word sits on its own vertex.'
+      say(how === 'solved' ? 'Solved. Every word sits on its own vertex.'
         : 'Solution shown.', how === 'solved' ? 'good' : 'hint');
       btnCheck.disabled = btnClear.disabled = btnHint.disabled = btnGiveUp.disabled = true;
       result.innerHTML = '';
@@ -287,7 +291,6 @@
     }
 
     buildBoard();
-    if (solved) await finish('solved');
     return { reset: function () { btnClear.click(); } };
   };
 
