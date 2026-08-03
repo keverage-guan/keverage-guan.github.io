@@ -33,6 +33,9 @@ exclude:
   - Gemfile.lock
   - README.md
   - vendor
+  - pack.py
+  - puzzles/
+  - README-hyperconnections.md
 
 
 # Minima-specific settings (Minima v3+)

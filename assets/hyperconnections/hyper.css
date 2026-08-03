@@ -1,0 +1,208 @@
+/* Hyperconnections — scoped to .hc so it sits quietly inside your existing theme. */
+
+.hc {
+  --hc-c0: #d64f6e;
+  --hc-c1: #e8a33d;
+  --hc-c2: #3aa6a0;
+  --hc-c3: #6c63d8;
+  --hc-line: rgba(128, 128, 140, 0.35);
+  --hc-soft: rgba(128, 128, 140, 0.10);
+  --hc-warn: #b4682a;
+  --hc-good: #2f7d5b;
+  margin: 1.5rem 0 2rem;
+  font-size: 1rem;
+}
+
+.hc *,
+.hc *::before,
+.hc *::after { box-sizing: border-box; }
+
+/* legend ------------------------------------------------------------------ */
+.hc-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-bottom: 0.9rem;
+}
+
+.hc-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  padding: 0.28rem 0.6rem;
+  border: 1px solid var(--hc-line);
+  border-radius: 999px;
+  font-size: 0.85rem;
+  line-height: 1.3;
+}
+
+.hc-swatch {
+  width: 0.7rem;
+  height: 0.7rem;
+  border-radius: 2px;
+  flex: none;
+}
+
+.hc-chip.c0 .hc-swatch { background: var(--hc-c0); }
+.hc-chip.c1 .hc-swatch { background: var(--hc-c1); }
+.hc-chip.c2 .hc-swatch { background: var(--hc-c2); }
+.hc-chip.c3 .hc-swatch { background: var(--hc-c3); }
+
+.hc-count {
+  font-variant-numeric: tabular-nums;
+  opacity: 0.55;
+  font-size: 0.8em;
+}
+
+.hc-chip.is-full .hc-count { opacity: 1; color: var(--hc-good); }
+.hc-chip.is-named { font-weight: 600; }
+
+/* board ------------------------------------------------------------------- */
+.hc-board {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+.hc-tile {
+  border: 1px solid var(--hc-line);
+  border-radius: 8px;
+  padding: 0.55rem 0.5rem 0.45rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+  transition: background 140ms ease, border-color 140ms ease;
+}
+
+.hc-tile:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.hc-word {
+  font-weight: 600;
+  letter-spacing: 0.01em;
+  text-align: center;
+  word-break: break-word;
+  line-height: 1.2;
+}
+
+.hc-tile.is-dupe { border-color: var(--hc-warn); border-style: dashed; }
+.hc-tile.is-locked { box-shadow: inset 0 0 0 2px var(--hc-soft); }
+.hc-tile.is-locked .hc-word::after { content: " \25CF"; font-size: 0.55em; vertical-align: super; opacity: 0.5; }
+
+/* the 4-bit readout ------------------------------------------------------- */
+.hc-bits { display: flex; gap: 3px; }
+
+.hc-bit {
+  width: 1.6rem;
+  height: 1.4rem;
+  border: 1px solid var(--hc-line);
+  border-radius: 4px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.72rem;
+  line-height: 1;
+  opacity: 0.45;
+  cursor: pointer;
+  padding: 0;
+  transition: opacity 120ms ease, background 120ms ease, color 120ms ease;
+}
+
+.hc-bit:hover { opacity: 0.8; }
+
+.hc-bit.on { opacity: 1; color: #fff; border-color: transparent; font-weight: 700; }
+.hc-bit.c0.on { background: var(--hc-c0); }
+.hc-bit.c1.on { background: var(--hc-c1); }
+.hc-bit.c2.on { background: var(--hc-c2); }
+.hc-bit.c3.on { background: var(--hc-c3); }
+
+.hc-board.is-done .hc-bit { cursor: default; }
+
+/* controls ---------------------------------------------------------------- */
+.hc-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  margin-top: 0.9rem;
+}
+
+.hc-btn {
+  border: 1px solid var(--hc-line);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.hc-btn:hover:not(:disabled) { background: var(--hc-soft); }
+.hc-btn:disabled { opacity: 0.4; cursor: default; }
+.hc-btn-primary { font-weight: 600; border-width: 2px; }
+.hc-btn-quiet { opacity: 0.65; }
+
+.hc-status {
+  min-height: 1.4em;
+  margin: 0.9rem 0 0;
+  font-size: 0.92rem;
+}
+
+.hc-status.is-warn { color: var(--hc-warn); }
+.hc-status.is-good { color: var(--hc-good); font-weight: 600; }
+.hc-status.is-hint { opacity: 0.8; }
+
+/* solved view ------------------------------------------------------------- */
+.hc-cube { margin-top: 1.5rem; }
+.hc-cube-title { margin: 0 0 0.2rem; font-size: 1rem; }
+.hc-cube-note { margin: 0 0 0.7rem; font-size: 0.85rem; opacity: 0.7; }
+
+.hc-cube-grid {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.hc-cube-grid th,
+.hc-cube-grid td {
+  border: 1px solid var(--hc-line);
+  padding: 0.45rem 0.35rem;
+  text-align: center;
+}
+
+.hc-cube-h {
+  font-weight: 500;
+  font-size: 0.75rem;
+  opacity: 0.7;
+  background: var(--hc-soft);
+}
+
+.hc-cube-corner { border: none; background: none; }
+.hc-cube-cell { font-weight: 600; }
+
+/* page furniture ---------------------------------------------------------- */
+.hc-picker-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0 0.25rem;
+}
+
+.hc-picker-row select {
+  font: inherit;
+  padding: 0.35rem 0.5rem;
+  border-radius: 6px;
+}
+
+@media (max-width: 560px) {
+  .hc-board { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .hc-bit { width: 1.9rem; height: 1.7rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hc-tile, .hc-bit { transition: none; }
+}

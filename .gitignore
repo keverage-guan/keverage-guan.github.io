@@ -5,3 +5,5 @@ Gemfile.lock
 vendor/
 .sass-cache/
 .DS_Store
+puzzles/
+pack.py

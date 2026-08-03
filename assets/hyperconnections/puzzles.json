@@ -1,0 +1,30 @@
+{
+  "version": 1,
+  "puzzles": [
+    {
+      "id": 1,
+      "title": "Puzzle 1 — Vowel movement",
+      "words": [
+        "build",
+        "faun",
+        "curious",
+        "chaos",
+        "blast",
+        "tour",
+        "join",
+        "avoid",
+        "nymph",
+        "lost",
+        "brain",
+        "blink",
+        "crux",
+        "audio",
+        "audit",
+        "about"
+      ],
+      "hash": "c2765705b7d3736aa1103d478335984b836d84a318acc8c2ca0b1eedb046fe91",
+      "payload": "7twqPp6/GDkbQ7dQanvsXwjXQBl0F15eh/VR+YxrkUvUffvvd1ocEcodh0zxT4dg+EClmVd+3JifpOaCotRia+EMvXK3BWaxmR/6hNAFFjyE5Z6zsvDEGBVbwsAmmZDt8VN7M5HDXQw0p3E=",
+      "note": "A gentle one: all four categories are about spelling."
+    }
+  ]
+}

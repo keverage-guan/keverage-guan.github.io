@@ -1,0 +1,85 @@
+---
+layout: default
+title: How to play Hyperconnections
+permalink: /hyperconnections/instructions/
+description: The rules of Hyperconnections, with a worked example you can solve.
+---
+
+# How to play
+
+In ordinary connections, sixteen words split into four groups of four. The groups are
+disjoint: every word belongs to exactly one of them, and finding a group removes those
+words from play.
+
+Hyperconnections keeps the sixteen words and the four categories, and throws out the
+disjointness. Here the categories **bisect each other**. Each category contains eight
+of the sixteen words. Any two categories share exactly four words. Any three share
+exactly two. All four share exactly one — and exactly one word belongs to none of them.
+
+Three ways to say the same thing:
+
+- Each word belongs to **some subset** of the four categories, and every one of the
+  sixteen possible subsets is used exactly once — a bijection between the words and
+  the powerset of the set of categories.
+- Give each word a four-bit code, one bit per category. The sixteen codes are the
+  sixteen points of the **Boolean hypercube** {0,1}⁴, each used once.
+- The words are the vertices of Q₄, the four-dimensional cube. Words joined by an
+  edge differ in exactly one category.
+
+Nothing gets eliminated as you go, and no group of four ever "resolves". You are
+filling in a whole labelling at once, and it is either consistent or it isn't.
+
+## What you actually do
+
+Every word tile has four buttons, one per group. Turn on the buttons for the groups you
+think that word belongs to. Two things to watch:
+
+- **No two words may share a pattern.** The board flags duplicates as you build. This is
+  the whole constraint: sixteen distinct four-bit patterns automatically means eight words
+  per group, four words in each pair of groups, and so on.
+- **Which group is which doesn't matter, and neither does polarity.** Group 1 and Group 3
+  can be swapped freely, and "has an A" and "doesn't have an A" cut the words exactly the
+  same way. The checker treats all of these as the same answer, and tells you the real
+  names once you're right.
+
+## A worked example
+
+The four categories below are the presence of the vowels **A**, **U**, **I** and **O**.
+*audio* has all four, *nymph* has none, *tour* has U and O, and so on. Try it — the
+categories are unlabelled until you solve it.
+
+<div id="hc-demo">Loading…</div>
+
+<link rel="stylesheet" href="{{ '/assets/hyperconnections/hyper.css' | relative_url }}">
+<script src="{{ '/assets/hyperconnections/hyper-core.js' | relative_url }}"></script>
+<script src="{{ '/assets/hyperconnections/hyper-game.js' | relative_url }}"></script>
+{% raw %}
+<script>
+  HC.mount(document.getElementById('hc-demo'), {
+    mode: 'plain',
+    storeKey: 'demo-vowels',
+    puzzle: {
+      id: 'demo',
+      categories: ['has an A', 'has a U', 'has an I', 'has an O'],
+      words: ['audio', 'nymph', 'tour', 'brain', 'lost', 'crux', 'avoid', 'blast',
+              'build', 'chaos', 'join', 'faun', 'about', 'blink', 'curious', 'audit'],
+      masks: [15, 0, 10, 5, 8, 2, 13, 1, 6, 9, 12, 3, 11, 4, 14, 7]
+    }
+  });
+</script>
+{% endraw %}
+
+Solved, the sixteen words lay out on a 4×4 grid where neighbouring cells differ in exactly
+one vowel — and the left and right edges are neighbours too, as are the top and bottom.
+That wrapped grid *is* the four-dimensional cube: Q₄ ≅ C₄ □ C₄.
+
+## Notes for setters
+
+A hyperconnections puzzle is harder to build than an ordinary one, because you need a
+property that splits your vocabulary evenly four times over rather than four groups that
+happen to be clean. Presence-of-letter categories are the friendliest starting point;
+they get much more interesting once the four categories are of different kinds.
+
+[Back to the puzzles →](/hyperconnections/)
+
+Credit for the format goes to [Jonah Stockwell](https://jonahstockwell.com/).
