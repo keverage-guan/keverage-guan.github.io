@@ -10,6 +10,9 @@
   var REDUCED = !!(global.matchMedia &&
     global.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
+  var CUBE_NOTE = 'Neighbouring cells differ by exactly one category. Edges wrap ' +
+    'around, which is what makes this 4×4 grid a drawing of Q\u2084.';
+
   function el(tag, cls, txt) {
     var e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -89,6 +92,9 @@
     var board = el('div', 'hc-board');
     root.appendChild(board);
 
+    var note = el('p', 'hc-cube-note');
+    root.appendChild(note);
+
     var status = el('p', 'hc-status');
     status.setAttribute('role', 'status');
     root.appendChild(status);
@@ -101,9 +107,6 @@
     var btnGiveUp = el('button', 'hc-btn hc-btn-quiet', 'Show solution');
     [btnCheck, btnClear, btnShuffle, btnHint, btnGiveUp].forEach(function (x) { bar.appendChild(x); });
     root.appendChild(bar);
-
-    var result = el('div', 'hc-result');
-    root.appendChild(result);
 
     /* ---- board ---- */
     var tiles = [];
@@ -270,38 +273,58 @@
         : 'Solution shown.', how === 'solved' ? 'good' : 'hint');
       btnCheck.disabled = btnClear.disabled = btnShuffle.disabled =
         btnHint.disabled = btnGiveUp.disabled = true;
-      result.innerHTML = '';
-      var cube = gridView(t);
-      result.appendChild(cube);
-      if (boardCols() === 4) await reorderToCube(t);
-      await flyToCube(cube);
+      if (boardCols() === 4) await revealCube(t);
     }
 
-    /* How many columns the board is currently laid out in. Below 560px the
-     * board drops to two, and cube reading order no longer lines up. */
+    /* How many columns the board is laid out in right now. Below 560px it drops
+     * to two, where cube reading order would mean nothing. */
     function boardCols() {
       var g = getComputedStyle(board).gridTemplateColumns;
       return g ? g.split(' ').filter(Boolean).length : 4;
     }
 
-    /* Reorder the tiles in place into hypercube reading order (FLIP). */
-    function reorderToCube(t) {
+    /* Slide the tiles into hypercube order (FLIP) and grow axis labels around
+     * them, so the board the player built becomes the drawing of Q4. */
+    function revealCube(t) {
       return new Promise(function (resolve) {
         var slots = new Array(16);
         for (var i = 0; i < 16; i++) {
           var c = HC.cell(t.masks[i]);
           slots[c.row * 4 + c.col] = i;
         }
+
         var before = {};
         tiles.forEach(function (tile) { before[tile._index] = tile.getBoundingClientRect(); });
 
         var byIndex = {};
         tiles.forEach(function (tile) { byIndex[tile._index] = tile; });
-        order = slots;
-        order.forEach(function (i) { board.appendChild(byIndex[i]); });
-        tiles = order.map(function (i) { return byIndex[i]; });
 
-        if (REDUCED) { resolve(); return; }
+        var axes = [], kids = [];
+        function axis(cls, txt) {
+          var a = el('div', 'hc-axis ' + cls, txt);
+          axes.push(a); kids.push(a);
+        }
+        axis('hc-axis-corner', '');
+        for (var col = 0; col < 4; col++) {
+          axis('hc-axis-col', labelFor(HC.GRAY[col], [0, 1], t));
+        }
+        for (var row = 0; row < 4; row++) {
+          axis('hc-axis-row', labelFor(HC.GRAY[row], [2, 3], t));
+          for (var c2 = 0; c2 < 4; c2++) kids.push(byIndex[slots[row * 4 + c2]]);
+        }
+
+        order = slots;
+        tiles = order.map(function (i) { return byIndex[i]; });
+        kids.forEach(function (k) { board.appendChild(k); });
+        board.classList.add('is-labelled');
+        note.textContent = CUBE_NOTE;
+        note.classList.add('is-shown');
+
+        if (REDUCED) {
+          axes.forEach(function (a) { a.classList.add('is-in'); });
+          resolve();
+          return;
+        }
 
         tiles.forEach(function (tile) {
           var a = before[tile._index], b = tile.getBoundingClientRect();
@@ -311,106 +334,16 @@
         });
         requestAnimationFrame(function () {
           tiles.forEach(function (tile) {
-            tile.style.transition = 'transform 460ms cubic-bezier(.2,.7,.2,1)';
+            tile.style.transition = 'transform 520ms cubic-bezier(.2,.7,.2,1)';
             tile.style.transform = '';
           });
+          axes.forEach(function (a) { a.classList.add('is-in'); });
           setTimeout(function () {
             tiles.forEach(function (tile) { tile.style.transition = ''; });
             resolve();
-          }, 500);
+          }, 560);
         });
       });
-    }
-
-    /* Fly a copy of each word from its tile down into its table cell. */
-    function flyToCube(cube) {
-      return new Promise(function (resolve) {
-        var cells = cube.querySelectorAll('.hc-cube-cell[data-word]');
-        if (REDUCED || !cells.length) { resolve(); return; }
-
-        root.scrollIntoView({ block: 'start' });   // fixed ghosts hate mid-flight scrolling
-        requestAnimationFrame(function () {
-          var byIndex = {};
-          tiles.forEach(function (tile) { byIndex[tile._index] = tile; });
-          cube.classList.add('is-arriving');
-
-          var flights = [];
-          Array.prototype.forEach.call(cells, function (td) {
-            var tile = byIndex[+td.dataset.word];
-            if (!tile) return;
-            var wordEl = tile.querySelector('.hc-word');
-            var src = wordEl.getBoundingClientRect();
-            var dst = td.getBoundingClientRect();
-            var ghost = el('div', 'hc-ghost', wordEl.textContent);
-            ghost.style.left = src.left + 'px';
-            ghost.style.top = src.top + 'px';
-            ghost.style.width = src.width + 'px';
-            root.appendChild(ghost);
-            flights.push({
-              ghost: ghost,
-              dx: (dst.left + dst.width / 2) - (src.left + src.width / 2),
-              dy: (dst.top + dst.height / 2) - (src.top + src.height / 2)
-            });
-          });
-
-          if (!flights.length) { cube.classList.remove('is-arriving'); resolve(); return; }
-
-          requestAnimationFrame(function () {
-            flights.forEach(function (f, k) {
-              f.ghost.style.transition =
-                'transform 560ms cubic-bezier(.3,.8,.3,1) ' + (k * 20) + 'ms';
-              f.ghost.style.transform = 'translate(' + f.dx + 'px,' + f.dy + 'px)';
-            });
-            setTimeout(function () {
-              cube.classList.remove('is-arriving');
-              flights.forEach(function (f) {
-                f.ghost.style.transition = 'opacity 140ms ease';
-                f.ghost.style.opacity = '0';
-                setTimeout(function () { f.ghost.remove(); }, 160);
-              });
-              resolve();
-            }, 560 + flights.length * 20 + 40);
-          });
-        });
-      });
-    }
-
-    function gridView(t) {
-      var wrap = el('div', 'hc-cube');
-      wrap.appendChild(el('h4', 'hc-cube-title', 'The hypercube'));
-      wrap.appendChild(el('p', 'hc-cube-note',
-        'Neighbouring cells differ by exactly one category. Edges wrap around, ' +
-        'which is what makes this 4×4 grid a drawing of Q\u2084.'));
-      var table = el('table', 'hc-cube-grid');
-      var byCell = {};
-      for (var i = 0; i < 16; i++) {
-        var c = HC.cell(t.masks[i]);
-        byCell[c.row + ',' + c.col] = { word: words[i], mask: t.masks[i], index: i };
-      }
-      var thead = el('thead'), hr = el('tr');
-      hr.appendChild(el('th', 'hc-cube-corner', ''));
-      for (var col = 0; col < 4; col++) {
-        hr.appendChild(el('th', 'hc-cube-h', labelFor(HC.GRAY[col], [0, 1], t)));
-      }
-      thead.appendChild(hr); table.appendChild(thead);
-      var tbody = el('tbody');
-      for (var row = 0; row < 4; row++) {
-        var tr = el('tr');
-        tr.appendChild(el('th', 'hc-cube-h', labelFor(HC.GRAY[row], [2, 3], t)));
-        for (var c2 = 0; c2 < 4; c2++) {
-          var cell = byCell[row + ',' + c2];
-          var td = el('td', 'hc-cube-cell', cell ? cell.word : '');
-          if (cell) {
-            td.style.background = blend(cell.mask);
-            td.dataset.word = String(cell.index);
-          }
-          tr.appendChild(td);
-        }
-        tbody.appendChild(tr);
-      }
-      table.appendChild(tbody);
-      wrap.appendChild(table);
-      return wrap;
     }
 
     function labelFor(pair, cats, t) {

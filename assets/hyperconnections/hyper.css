@@ -62,6 +62,12 @@
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 0.5rem;
+  align-items: stretch;
+}
+
+/* once solved, an axis-label column and row appear around the tiles */
+.hc-board.is-labelled {
+  grid-template-columns: minmax(0, 7.5em) repeat(4, minmax(0, 1fr));
 }
 
 .hc-tile {
@@ -71,6 +77,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 0.45rem;
   transition: background 140ms ease, border-color 140ms ease;
   will-change: transform;
@@ -108,6 +115,35 @@
   border-color: var(--hc-warn);
 }
 
+/* axis labels ------------------------------------------------------------- */
+.hc-axis {
+  display: flex;
+  font-size: 0.72rem;
+  line-height: 1.25;
+  opacity: 0;
+  transition: opacity 320ms ease 200ms;
+  word-break: break-word;
+  hyphens: auto;
+}
+
+.hc-axis.is-in { opacity: 0.75; }
+
+.hc-axis-col {
+  align-items: flex-end;
+  justify-content: center;
+  text-align: center;
+  padding-bottom: 0.15rem;
+}
+
+.hc-axis-row {
+  align-items: center;
+  justify-content: flex-end;
+  text-align: right;
+  padding-right: 0.15rem;
+}
+
+.hc-axis-corner { min-height: 1.5em; }
+
 /* the 4-bit readout ------------------------------------------------------- */
 .hc-bits { display: flex; gap: 3px; }
 
@@ -136,6 +172,22 @@
 .hc-bit.c3.on { background: var(--hc-c3); }
 
 .hc-board.is-done .hc-bit { cursor: default; }
+
+/* the note under the board, shown once the board becomes the cube --------- */
+.hc-cube-note {
+  margin: 0;
+  max-height: 0;
+  overflow: hidden;
+  font-size: 0.85rem;
+  opacity: 0;
+  transition: opacity 320ms ease 260ms;
+}
+
+.hc-cube-note.is-shown {
+  max-height: none;
+  margin: 0.9rem 0 0;
+  opacity: 0.7;
+}
 
 /* controls ---------------------------------------------------------------- */
 .hc-actions {
@@ -171,47 +223,6 @@
 .hc-status.is-good { color: var(--hc-good); font-weight: 600; }
 .hc-status.is-hint { opacity: 0.8; }
 
-/* solved view ------------------------------------------------------------- */
-.hc-cube { margin-top: 1.5rem; }
-.hc-cube-title { margin: 0 0 0.2rem; font-size: 1rem; }
-.hc-cube-note { margin: 0 0 0.7rem; font-size: 0.85rem; opacity: 0.7; }
-
-.hc-cube-grid {
-  border-collapse: collapse;
-  width: 100%;
-  font-size: 0.9rem;
-}
-
-.hc-cube-grid th,
-.hc-cube-grid td {
-  border: 1px solid var(--hc-line);
-  padding: 0.45rem 0.35rem;
-  text-align: center;
-}
-
-.hc-cube-h {
-  font-weight: 500;
-  font-size: 0.75rem;
-  opacity: 0.7;
-  background: var(--hc-soft);
-}
-
-.hc-cube-corner { border: none; background: none; }
-.hc-cube-cell { font-weight: 600; transition: color 160ms ease; }
-
-/* words in flight --------------------------------------------------------- */
-.hc-cube.is-arriving .hc-cube-cell { color: transparent; }
-
-.hc-ghost {
-  position: fixed;
-  z-index: 60;
-  font-weight: 600;
-  line-height: 1.2;
-  text-align: center;
-  pointer-events: none;
-  will-change: transform;
-}
-
 /* page furniture ---------------------------------------------------------- */
 .hc-picker-row {
   display: flex;
@@ -233,6 +244,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hc-tile, .hc-bit, .hc-cube-cell { transition: none; }
+  .hc-tile, .hc-bit, .hc-axis, .hc-cube-note { transition: none; }
   .hc-tile.is-flash { animation: none; outline-color: var(--hc-warn); }
 }
