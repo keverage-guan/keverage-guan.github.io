@@ -94,8 +94,8 @@
     var btnCheck = el('button', 'hc-btn hc-btn-primary', 'Check answer');
     var btnClear = el('button', 'hc-btn', 'Clear board');
     var btnShuffle = el('button', 'hc-btn', 'Shuffle words');
-    var btnHint = el('button', 'hc-btn', 'Get a hint');
-    var btnGiveUp = el('button', 'hc-btn hc-btn-quiet', 'See Categories');
+    var btnHint = el('button', 'hc-btn', 'See categories');
+    var btnGiveUp = el('button', 'hc-btn hc-btn-quiet', 'Show solution');
     [btnCheck, btnClear, btnShuffle, btnHint, btnGiveUp].forEach(function (x) { bar.appendChild(x); });
     root.appendChild(bar);
 
