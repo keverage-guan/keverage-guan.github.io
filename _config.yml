@@ -35,7 +35,6 @@ exclude:
   - vendor
   - pack.py
   - puzzles/
-  - README-hyperconnections.md
 
 
 # Minima-specific settings (Minima v3+)
@@ -51,7 +50,7 @@ minima:
     - courses.md
     - cv.md
     - contact.md
-    - hyperconnections.md
+    - /hyperconnections/
 
   show_excerpts: false
 
