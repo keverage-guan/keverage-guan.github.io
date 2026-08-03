@@ -73,6 +73,7 @@
   align-items: center;
   gap: 0.45rem;
   transition: background 140ms ease, border-color 140ms ease;
+  will-change: transform;
 }
 
 .hc-tile:focus-visible {
@@ -91,6 +92,21 @@
 .hc-tile.is-dupe { border-color: var(--hc-warn); border-style: dashed; }
 .hc-tile.is-locked { box-shadow: inset 0 0 0 2px var(--hc-soft); }
 .hc-tile.is-locked .hc-word::after { content: " \25CF"; font-size: 0.55em; vertical-align: super; opacity: 0.5; }
+
+/* clashing patterns, called out on submit --------------------------------- */
+@keyframes hc-flash {
+  0%   { outline-color: transparent; }
+  20%  { outline-color: var(--hc-warn); }
+  60%  { outline-color: var(--hc-warn); }
+  100% { outline-color: transparent; }
+}
+
+.hc-tile.is-flash {
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  animation: hc-flash 700ms ease-in-out 2;
+  border-color: var(--hc-warn);
+}
 
 /* the 4-bit readout ------------------------------------------------------- */
 .hc-bits { display: flex; gap: 3px; }
@@ -181,7 +197,20 @@
 }
 
 .hc-cube-corner { border: none; background: none; }
-.hc-cube-cell { font-weight: 600; }
+.hc-cube-cell { font-weight: 600; transition: color 160ms ease; }
+
+/* words in flight --------------------------------------------------------- */
+.hc-cube.is-arriving .hc-cube-cell { color: transparent; }
+
+.hc-ghost {
+  position: fixed;
+  z-index: 60;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  pointer-events: none;
+  will-change: transform;
+}
 
 /* page furniture ---------------------------------------------------------- */
 .hc-picker-row {
@@ -204,5 +233,6 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .hc-tile, .hc-bit { transition: none; }
+  .hc-tile, .hc-bit, .hc-cube-cell { transition: none; }
+  .hc-tile.is-flash { animation: none; outline-color: var(--hc-warn); }
 }

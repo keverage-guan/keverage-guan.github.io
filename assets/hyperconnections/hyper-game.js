@@ -7,6 +7,9 @@
 
   var RGB = [[214, 79, 110], [232, 163, 61], [58, 166, 160], [108, 99, 216]];
 
+  var REDUCED = !!(global.matchMedia &&
+    global.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
   function el(tag, cls, txt) {
     var e = document.createElement(tag);
     if (cls) e.className = cls;
@@ -162,15 +165,35 @@
       }
     }
 
+    /* Draw attention to specific tiles for a moment. */
+    function flash(indices) {
+      var want = new Set(indices);
+      tiles.forEach(function (tile) {
+        if (!want.has(tile._index)) return;
+        tile.classList.remove('is-flash');
+        void tile.offsetWidth;              // restart the animation
+        tile.classList.add('is-flash');
+        tile.addEventListener('animationend', function h() {
+          tile.classList.remove('is-flash');
+          tile.removeEventListener('animationend', h);
+        });
+      });
+    }
+
     /* ---- checking ---- */
     btnCheck.addEventListener('click', async function () {
       if (solved || gaveUp) return;
       if (!HC.isBijection(masks)) {
-        var seen = {}, dup = 0;
-        masks.forEach(function (m) { if (seen[m]) dup++; seen[m] = true; });
-        say('Not a valid grouping yet — ' + dup +
-          (dup === 1 ? ' word shares' : ' words share') +
-          ' a pattern with another word. All 16 patterns must be different.', 'warn');
+        var byPattern = {};
+        masks.forEach(function (m, i) { (byPattern[m] = byPattern[m] || []).push(i); });
+        var bad = [], clashes = 0;
+        Object.keys(byPattern).forEach(function (k) {
+          if (byPattern[k].length > 1) { bad = bad.concat(byPattern[k]); clashes++; }
+        });
+        flash(bad);
+        say(bad.length + ' words are sharing ' + clashes +
+          (clashes === 1 ? ' pattern' : ' patterns') +
+          ' — highlighted on the board. All 16 must be different.', 'warn');
         return;
       }
       var h = await HC.hashSolution(words, masks);
@@ -186,6 +209,7 @@
     });
 
     btnShuffle.addEventListener('click', function () {
+      if (solved || gaveUp) return;
       order = HC.shuffledIndices(16).map(function (k) { return order[k]; });
       buildBoard();
     });
@@ -244,9 +268,111 @@
       board.classList.add('is-done');
       say(how === 'solved' ? 'Solved! Every word sits on its own vertex.'
         : 'Solution shown.', how === 'solved' ? 'good' : 'hint');
-      btnCheck.disabled = btnClear.disabled = btnHint.disabled = btnGiveUp.disabled = true;
+      btnCheck.disabled = btnClear.disabled = btnShuffle.disabled =
+        btnHint.disabled = btnGiveUp.disabled = true;
       result.innerHTML = '';
-      result.appendChild(gridView(t));
+      var cube = gridView(t);
+      result.appendChild(cube);
+      if (boardCols() === 4) await reorderToCube(t);
+      await flyToCube(cube);
+    }
+
+    /* How many columns the board is currently laid out in. Below 560px the
+     * board drops to two, and cube reading order no longer lines up. */
+    function boardCols() {
+      var g = getComputedStyle(board).gridTemplateColumns;
+      return g ? g.split(' ').filter(Boolean).length : 4;
+    }
+
+    /* Reorder the tiles in place into hypercube reading order (FLIP). */
+    function reorderToCube(t) {
+      return new Promise(function (resolve) {
+        var slots = new Array(16);
+        for (var i = 0; i < 16; i++) {
+          var c = HC.cell(t.masks[i]);
+          slots[c.row * 4 + c.col] = i;
+        }
+        var before = {};
+        tiles.forEach(function (tile) { before[tile._index] = tile.getBoundingClientRect(); });
+
+        var byIndex = {};
+        tiles.forEach(function (tile) { byIndex[tile._index] = tile; });
+        order = slots;
+        order.forEach(function (i) { board.appendChild(byIndex[i]); });
+        tiles = order.map(function (i) { return byIndex[i]; });
+
+        if (REDUCED) { resolve(); return; }
+
+        tiles.forEach(function (tile) {
+          var a = before[tile._index], b = tile.getBoundingClientRect();
+          tile.style.transition = 'none';
+          tile.style.transform = 'translate(' + (a.left - b.left) + 'px,' +
+                                                (a.top - b.top) + 'px)';
+        });
+        requestAnimationFrame(function () {
+          tiles.forEach(function (tile) {
+            tile.style.transition = 'transform 460ms cubic-bezier(.2,.7,.2,1)';
+            tile.style.transform = '';
+          });
+          setTimeout(function () {
+            tiles.forEach(function (tile) { tile.style.transition = ''; });
+            resolve();
+          }, 500);
+        });
+      });
+    }
+
+    /* Fly a copy of each word from its tile down into its table cell. */
+    function flyToCube(cube) {
+      return new Promise(function (resolve) {
+        var cells = cube.querySelectorAll('.hc-cube-cell[data-word]');
+        if (REDUCED || !cells.length) { resolve(); return; }
+
+        root.scrollIntoView({ block: 'start' });   // fixed ghosts hate mid-flight scrolling
+        requestAnimationFrame(function () {
+          var byIndex = {};
+          tiles.forEach(function (tile) { byIndex[tile._index] = tile; });
+          cube.classList.add('is-arriving');
+
+          var flights = [];
+          Array.prototype.forEach.call(cells, function (td) {
+            var tile = byIndex[+td.dataset.word];
+            if (!tile) return;
+            var wordEl = tile.querySelector('.hc-word');
+            var src = wordEl.getBoundingClientRect();
+            var dst = td.getBoundingClientRect();
+            var ghost = el('div', 'hc-ghost', wordEl.textContent);
+            ghost.style.left = src.left + 'px';
+            ghost.style.top = src.top + 'px';
+            ghost.style.width = src.width + 'px';
+            root.appendChild(ghost);
+            flights.push({
+              ghost: ghost,
+              dx: (dst.left + dst.width / 2) - (src.left + src.width / 2),
+              dy: (dst.top + dst.height / 2) - (src.top + src.height / 2)
+            });
+          });
+
+          if (!flights.length) { cube.classList.remove('is-arriving'); resolve(); return; }
+
+          requestAnimationFrame(function () {
+            flights.forEach(function (f, k) {
+              f.ghost.style.transition =
+                'transform 560ms cubic-bezier(.3,.8,.3,1) ' + (k * 20) + 'ms';
+              f.ghost.style.transform = 'translate(' + f.dx + 'px,' + f.dy + 'px)';
+            });
+            setTimeout(function () {
+              cube.classList.remove('is-arriving');
+              flights.forEach(function (f) {
+                f.ghost.style.transition = 'opacity 140ms ease';
+                f.ghost.style.opacity = '0';
+                setTimeout(function () { f.ghost.remove(); }, 160);
+              });
+              resolve();
+            }, 560 + flights.length * 20 + 40);
+          });
+        });
+      });
     }
 
     function gridView(t) {
@@ -259,7 +385,7 @@
       var byCell = {};
       for (var i = 0; i < 16; i++) {
         var c = HC.cell(t.masks[i]);
-        byCell[c.row + ',' + c.col] = { word: words[i], mask: t.masks[i] };
+        byCell[c.row + ',' + c.col] = { word: words[i], mask: t.masks[i], index: i };
       }
       var thead = el('thead'), hr = el('tr');
       hr.appendChild(el('th', 'hc-cube-corner', ''));
@@ -274,7 +400,10 @@
         for (var c2 = 0; c2 < 4; c2++) {
           var cell = byCell[row + ',' + c2];
           var td = el('td', 'hc-cube-cell', cell ? cell.word : '');
-          if (cell) td.style.background = blend(cell.mask);
+          if (cell) {
+            td.style.background = blend(cell.mask);
+            td.dataset.word = String(cell.index);
+          }
           tr.appendChild(td);
         }
         tbody.appendChild(tr);
