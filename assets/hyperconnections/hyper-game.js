@@ -193,7 +193,7 @@
         flash(bad);
         say(bad.length + ' words are sharing ' + clashes +
           (clashes === 1 ? ' pattern' : ' patterns') +
-          ' — highlighted on the board. All 16 must be different.', 'warn');
+          '. All 16 must be different.', 'warn');
         return;
       }
       var h = await HC.hashSolution(words, masks);
