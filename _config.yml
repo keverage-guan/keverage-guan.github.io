@@ -51,6 +51,7 @@ minima:
     - courses.md
     - cv.md
     - contact.md
+    - hyperconnections.md
 
   show_excerpts: false
 
