@@ -3,28 +3,28 @@
   "puzzles": [
     {
       "id": 1,
-      "title": "Puzzle 1 — Vowel movement",
+      "title": "Puzzle 1",
       "words": [
-        "chaos",
-        "tour",
-        "nymph",
-        "blast",
         "faun",
-        "brain",
-        "lost",
-        "avoid",
-        "build",
         "blink",
-        "curious",
-        "join",
-        "crux",
-        "audit",
+        "lost",
         "about",
-        "audio"
+        "audit",
+        "build",
+        "join",
+        "nymph",
+        "curious",
+        "audio",
+        "tour",
+        "blast",
+        "crux",
+        "avoid",
+        "chaos",
+        "brain"
       ],
       "hash": "c2765705b7d3736aa1103d478335984b836d84a318acc8c2ca0b1eedb046fe91",
-      "payload": "7twqPp6/GDkbQ7dQanvsXwjXQBl0F15eh/VR+YxrkUvUffvvd1ocEcodh0zxT4dg+EClmVd+3JifpOaCotRia+EMvXK4BWSthBv6jNAHFjiY8YOwre3BGBFby9g/hJbt8VN9KozFXQwwp3E=",
-      "note": "A gentle one: all four categories are about spelling."
+      "payload": "7twqPp6/GDkbQ7dQanvsXwjXQBl0F15eh/VR+YxrkUvUffvvd1ocEcodh0zxT4dg+EClmVd+3JifpOaCotRia+EMvXKyBWGxkAfnjNADFjuY+J2tru3GAAlGz8AihYjw701mN47YSBEwp3E=",
+      "note": "An easy one: all four categories are about spelling."
     },
     {
       "id": 2,
@@ -125,6 +125,31 @@
       "hash": "104324e4d6f826fd588b4ab4aadfe1ac73b22239d815492dee5b2e0ef0f1a740",
       "payload": "8BVPsybMDcQfC3c/padDhmclld3IE2/k/cz1Qbth0XUwfRSmM87ae6J0Pgh3BwhsZfolVZNrON1+x4JbU/CqLQv/9w1UY88jDCCF9RF0thiMdBwez0+y7WmtDKRddJuCI0Y8WUJFUmepXw1SFlDZm9NXLrA2iUf2vcWbCmp2vc5sb/AdTtrrTYRpOirlcoeB67fZ",
       "note": "I hope you're well-read!"
+    },
+    {
+      "id": 6,
+      "title": "Puzzle 6",
+      "words": [
+        "55",
+        "100",
+        "1",
+        "9",
+        "31",
+        "3",
+        "144",
+        "28",
+        "41",
+        "5",
+        "17",
+        "13",
+        "22",
+        "987",
+        "29",
+        "2"
+      ],
+      "hash": "92d0b1c755e23d88a3be4b3b804dacb5ce25997a60d73bd8dbec4a3f0d7e4e48",
+      "payload": "vEPIi14ek0bQDt/jeChXfZuCTGug+ym+cMbPIn3NbaPW/HJBrVQ7kT4JQ/+Lan2UEJ6SmkDxW4J0em1iMZh5DSoDI3ueBya4ykhSOThKETCc5rLzmF/ZifIu2eUE3DzkgZ2J5fdy6QAqYbGfj9cn4AykzCw=",
+      "note": "For the mathematicians."
     }
   ]
 }
