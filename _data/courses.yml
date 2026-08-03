@@ -13,7 +13,7 @@
       title: Information Theory
       term: Fall 2025
       level: graduate
-    - code: COS 487
+    - code: COS 487 / MAT 407
       title: Theory of Computation
       term: Fall 2025
     - code: CEE 520 / COS 520
@@ -50,6 +50,9 @@
     - code: MAT 345
       title: Abstract Algebra
       term: Fall 2024
+    - code: ORF 309 / MAT 380
+      title: Probability and Stochastic Systems
+      term: Spring 2024
     - code: MAT 217
       title: Honors Linear Algebra
       term: Spring 2024
