@@ -242,7 +242,7 @@
         }
       }
       board.classList.add('is-done');
-      say(how === 'solved' ? 'Solved. Every word sits on its own vertex.'
+      say(how === 'solved' ? 'Solved! Every word sits on its own vertex.'
         : 'Solution shown.', how === 'solved' ? 'good' : 'hint');
       btnCheck.disabled = btnClear.disabled = btnHint.disabled = btnGiveUp.disabled = true;
       result.innerHTML = '';
