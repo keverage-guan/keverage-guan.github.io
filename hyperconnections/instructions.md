@@ -1,11 +1,9 @@
 ---
-layout: default
+layout: page
 title: How to play Hyperconnections
 permalink: /hyperconnections/instructions/
 description: The rules of Hyperconnections, with a worked example you can solve.
 ---
-
-# How to play
 
 In ordinary connections, sixteen words split into four groups of four. The groups are
 disjoint: every word belongs to exactly one of them, and finding a group removes those

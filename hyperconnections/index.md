@@ -1,11 +1,9 @@
 ---
-layout: default
+layout: page
 title: Hyperconnections
 permalink: /hyperconnections/
 description: A connections variant where the four categories cut across each other instead of partitioning the words.
 ---
-
-# Hyperconnections
 
 Sixteen words, four hidden categories — but the categories overlap. Every word belongs
 to a *different* combination of them, so the answer is a labelling of the vertices of a
