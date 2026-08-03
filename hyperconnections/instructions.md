@@ -5,38 +5,33 @@ permalink: /hyperconnections/instructions/
 description: The rules of Hyperconnections, with a worked example you can solve.
 ---
 
-In ordinary connections, sixteen words split into four groups of four. The groups are
-disjoint: every word belongs to exactly one of them, and finding a group removes those
-words from play.
+In ordinary connections, the sixteen words split into disjoint groups of four. Every word belongs to exactly one group, and finding a group removes those words from play.
 
 Hyperconnections keeps the sixteen words and the four categories, and throws out the
-disjointness. Here the categories **bisect each other**. Each category contains eight
+disjointness. Here, the categories bisect each other. Each category contains eight
 of the sixteen words. Any two categories share exactly four words. Any three share
 exactly two. All four share exactly one — and exactly one word belongs to none of them.
 
-Three ways to say the same thing:
+Equivalent ways to describe these puzzles:
 
-- Each word belongs to **some subset** of the four categories, and every one of the
+- Each word belongs to a subset of the four categories, and every one of the
   sixteen possible subsets is used exactly once — a bijection between the words and
-  the powerset of the set of categories.
-- Give each word a four-bit code, one bit per category. The sixteen codes are the
-  sixteen points of the **Boolean hypercube** {0,1}⁴, each used once.
+  the power set of the set of categories.
+- Each word is assigned a four-bit code, one bit per category. The sixteen codes are the
+  sixteen points of the **Boolean hypercube** {0,1}⁴.
 - The words are the vertices of Q₄, the four-dimensional cube. Words joined by an
   edge differ in exactly one category.
 
-Nothing gets eliminated as you go, and no group of four ever "resolves". You are
-filling in a whole labelling at once, and it is either consistent or it isn't.
+Nothing is eliminated as you go. You must fill in the whole labelling at once, and it is either consistent or it isn't.
 
 ## What you actually do
 
 Every word tile has four buttons, one per group. Turn on the buttons for the groups you
-think that word belongs to. Two things to watch:
+think that word belongs to. Two things to watch for:
 
-- **No two words may share a pattern.** The board flags duplicates as you build. This is
-  the whole constraint: sixteen distinct four-bit patterns automatically means eight words
-  per group, four words in each pair of groups, and so on.
+- **No two words may share a pattern.** The board flags duplicates as you build. Sixteen distinct four-bit patterns automatically means eight words per group, four words in each pair of groups, and so on.
 - **Which group is which doesn't matter, and neither does polarity.** Group 1 and Group 3
-  can be swapped freely, and "has an A" and "doesn't have an A" cut the words exactly the
+  can be swapped freely, and "has an A" and "doesn't have an A" cut the words in the
   same way. The checker treats all of these as the same answer, and tells you the real
   names once you're right.
 
@@ -69,14 +64,11 @@ categories are unlabelled until you solve it.
 
 Solved, the sixteen words lay out on a 4×4 grid where neighbouring cells differ in exactly
 one vowel — and the left and right edges are neighbours too, as are the top and bottom.
-That wrapped grid *is* the four-dimensional cube: Q₄ ≅ C₄ □ C₄.
+That wrapped grid is the four-dimensional cube.
 
 ## Notes for setters
 
-A hyperconnections puzzle is harder to build than an ordinary one, because you need a
-property that splits your vocabulary evenly four times over rather than four groups that
-happen to be clean. Presence-of-letter categories are the friendliest starting point;
-they get much more interesting once the four categories are of different kinds.
+A hyperconnections puzzle is harder to build than an ordinary one. I find that it is best two start with two interesting categories, look for four overlapping words, and then find two simpler categories that complete the hypercube.
 
 [Back to the puzzles →](/hyperconnections/)
 

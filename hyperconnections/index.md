@@ -5,11 +5,10 @@ permalink: /hyperconnections/
 description: A connections variant where the four categories cut across each other instead of partitioning the words.
 ---
 
-Sixteen words, four hidden categories — but the categories overlap. Every word belongs
-to a *different* combination of them, so the answer is a labelling of the vertices of a
+Sixteen words, four hidden categories. Every word belongs to a different combination of the categories, so the answer is a labelling of the vertices of a
 four-dimensional cube. [How to play →](/hyperconnections/instructions/)
 
-Mark each word with the groups it belongs to, using the four buttons on its tile.
+Mark each word with the groups it belongs to using the four buttons on its tile.
 When all sixteen patterns are different, check your answer.
 
 <div class="hc-picker-row">
@@ -32,9 +31,4 @@ When all sixteen patterns are different, check your answer.
 
 ---
 
-Your progress is kept in this browser only. The site stores a SHA-256 hash of each
-solution rather than the solution itself, so poking around in the page source is
-more work than solving the puzzle.
-
-Hyperconnections is [Jonah Stockwell's](https://jonahstockwell.com/) idea; this is
-just my place to play it.
+Your progress is kept in this browser only. I learned about this type of puzzle from [Jonah Stockwell's](https://jonahstockwell.com/).
