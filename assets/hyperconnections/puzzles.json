@@ -150,6 +150,31 @@
       "hash": "92d0b1c755e23d88a3be4b3b804dacb5ce25997a60d73bd8dbec4a3f0d7e4e48",
       "payload": "vEPIi14ek0bQDt/jeChXfZuCTGug+ym+cMbPIn3NbaPW/HJBrVQ7kT4JQ/+Lan2UEJ6SmkDxW4J0em1iMZh5DSoDI3ueBya4ykhSOThKETCc5rLzmF/ZifIu2eUE3DzkgZ2J5fdy6QAqYbGfj9cn4AykzCw=",
       "note": "For the mathematicians."
+    },
+    {
+      "id": 7,
+      "title": "Puzzle 7",
+      "words": [
+        "massachusetts institute of technology",
+        "cornell",
+        "mcgill",
+        "princeton",
+        "harvard",
+        "oxford",
+        "dartmouth",
+        "babson",
+        "quinnipiac university",
+        "brown",
+        "yale",
+        "columbia",
+        "lehigh",
+        "villanova",
+        "upenn",
+        "brandeis"
+      ],
+      "hash": "47a0ad7e8d920fe0727afe9c17ea42834799a3a7d4a8ed92d885c5b77dc8853c",
+      "payload": "9mJ4XiI84bqyKxA5D4ULvKADrN5rvYgUDKMcRXJtK9YK2WTuhByv4eQxg3vy+7p3j9owSyHpdPurn80kNsjsmiCkWVwrNcQY0ZjwHQ30Ktg0BKb0sGT+YLALQ44PHj4peUPKIw9+w8s2QOVFqtnI0ma1c9Bw4+qeekTBjIoa8cJZezJOKdK/",
+      "note": "I went to one of these."
     }
   ]
 }
