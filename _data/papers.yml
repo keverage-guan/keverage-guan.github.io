@@ -6,7 +6,6 @@
   venue: "Language Technologies for Low-Resource Languages (LaTeLL)"
   year: 2026
   status: published
-  note: "Accepted to LaTeLL 2026"
   arxiv: "https://arxiv.org/abs/2605.02608"
 
 - title: "AfriSUD: A Dependency Treebank Collection for Evaluating Models on African Languages"
@@ -29,19 +28,19 @@
     - Rooweither Mabuya
     - Idris Akinade
     - Christiane Fellbaum
-  year: 2026
+  note: Under Review
   arxiv: "https://arxiv.org/abs/2606.12708"
 
 - title: "Recovering the Temporal Structure of Drifting Data from Model Weights"
   authors:
     - Kevin Guan
-  year: 2026
+  note: Under Review
   arxiv: "https://arxiv.org/abs/2607.27482"
   code: "https://github.com/keverage-guan/latent_states"
 
 - title: "The transversal achievement game on a square grid"
   authors:
     - Kevin Guan
-  year: 2026
+  note: Under Review
   arxiv: "https://arxiv.org/abs/2608.13501"
   code: "https://github.com/keverage-guan/transversal"
