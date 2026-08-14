@@ -31,7 +31,7 @@ fills up and neither player has one, the game is a draw.
         'edges you claim one at a time.',
 
       // Per-size commentary, if you want it. Delete or add freely.
-      1: 'Golly, I wonder who's going to win this one.',
+      1: 'Golly, I wonder who\'s going to win this one.',
       2: 'Theoretically, X could win.',
       3:
         'The smallest somewhat interesting board, a draw with optimal play.',

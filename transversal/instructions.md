@@ -19,7 +19,7 @@ five different columns.
   <figure id="tv-fig-no"></figure>
 </div>
 
-In the second board X holds five cells, but two of them sit in row 4, and two of them sit in column 3, so the largest set with no repeated line has size four—one short.
+On the second board, X holds five cells. However, two of them sit in row 4, and two of them sit in column 3, so the largest set with no repeated line has size four—one short.
 
 ## Playing the computer
 
@@ -30,8 +30,7 @@ Choose your side and a difficulty. The computer moves after a short pause.
 - **Medium** takes a win when one is available and blocks your immediate threat when you have
   one. Otherwise it plays at random. It will not see a double threat coming.
 - **Hard** plays the optimal strategy below when it has X, and wins by ply 2*n*+3 on
-  every board of size 4 × 4 or larger no matter how you defend. With O it takes a win,
-  blocks immediate threats, denies cells that would give you a double threat, and
+  every board of size 4 × 4 or larger no matter how you defend. With O, it blocks immediate threats, denies cells that would give you a double threat, and
   otherwise plays inside the rows and columns you have not touched yet. On the
   1 × 1 to 3 × 3 boards it solves the game outright, so it takes every win available and
   never loses a drawn position.
