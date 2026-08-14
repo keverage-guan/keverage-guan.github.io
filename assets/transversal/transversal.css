@@ -1,0 +1,223 @@
+/* Transversal — scoped to .tv so it sits quietly inside the existing theme.
+ * Deliberately parallel to hyper.css: same border, radius and button idiom. */
+
+.tv {
+  --tv-x: #2f6fd0;
+  --tv-o: #c8384a;
+
+  --tv-x-soft: rgba(47, 111, 208, 0.13);
+  --tv-o-soft: rgba(200, 56, 74, 0.13);
+  --tv-x-edge: rgba(47, 111, 208, 0.45);
+  --tv-o-edge: rgba(200, 56, 74, 0.45);
+
+  --tv-line: rgba(128, 128, 140, 0.35);
+  --tv-soft: rgba(128, 128, 140, 0.10);
+  --tv-warn: #b4682a;
+  --tv-good: #2f7d5b;
+
+  /* the outline drawn round a completed transversal */
+  --tv-win: #000;
+
+  margin: 1.5rem 0 2rem;
+  font-size: 1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .tv {
+    --tv-x: #74a8f0;
+    --tv-o: #f0757f;
+    --tv-win: #f2f2f2;      /* black is invisible on a dark board */
+  }
+}
+
+.tv *,
+.tv *::before,
+.tv *::after { box-sizing: border-box; }
+
+/* controls ---------------------------------------------------------------- */
+.tv-controls {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1.1rem;
+  margin-bottom: 1rem;
+}
+
+.tv-field {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.88rem;
+}
+
+.tv-field.is-hidden { display: none; }
+
+.tv-field-label { opacity: 0.7; }
+
+.tv-select {
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.3rem 0.45rem;
+  border: 1px solid var(--tv-line);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+}
+
+/* board ------------------------------------------------------------------- */
+.tv-board {
+  display: grid;
+  grid-template-columns: repeat(var(--tv-n, 5), minmax(0, 1fr));
+  gap: 4px;
+  /* Cap the cell size too, so a 1x1 board is a single small square rather than
+     one 30rem slab. */
+  width: min(100%, 30rem, calc(var(--tv-n, 5) * 4.2rem));
+}
+
+.tv-cell {
+  aspect-ratio: 1 / 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  border: 1px solid var(--tv-line);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  font-size: 1.05rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: background 120ms ease, border-color 120ms ease;
+}
+
+/* Scale the X and O with the cell, so a 10x10 board stays legible. */
+@supports (container-type: size) {
+  .tv-cell { container-type: size; }
+  .tv-mark { font-size: 52cqh; }
+}
+
+.tv-cell:disabled { cursor: default; }
+
+.tv-cell:not(:disabled):hover { background: var(--tv-soft); }
+
+.tv-cell:focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 2px;
+}
+
+.tv-cell.is-x {
+  color: var(--tv-x);
+  background: var(--tv-x-soft);
+  border-color: var(--tv-x-edge);
+}
+
+.tv-cell.is-o {
+  color: var(--tv-o);
+  background: var(--tv-o-soft);
+  border-color: var(--tv-o-edge);
+}
+
+/* the completed transversal */
+.tv-cell.is-win {
+  outline: 3px solid var(--tv-win);
+  outline-offset: -3px;
+  border-radius: 6px;
+}
+
+/* a free cell that would win for whoever is to move */
+.tv-cell.is-threat {
+  border-color: var(--tv-warn);
+  border-style: dashed;
+}
+
+.tv-board.is-static .tv-cell { cursor: default; }
+
+/* status and actions ------------------------------------------------------ */
+.tv-status {
+  min-height: 1.4em;
+  margin: 0.9rem 0 0;
+  font-size: 0.92rem;
+}
+
+.tv-status.is-x-turn { color: var(--tv-x); }
+.tv-status.is-o-turn { color: var(--tv-o); }
+.tv-status.is-won { color: var(--tv-good); font-weight: 600; }
+
+.tv-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.9rem;
+  margin-top: 0.9rem;
+}
+
+.tv-btn {
+  border: 1px solid var(--tv-line);
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.4rem 0.75rem;
+  cursor: pointer;
+}
+
+.tv-btn:hover:not(:disabled) { background: var(--tv-soft); }
+.tv-btn:disabled { opacity: 0.4; cursor: default; }
+.tv-btn-primary { font-weight: 600; border-width: 2px; }
+
+.tv-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-size: 0.85rem;
+  opacity: 0.75;
+  cursor: pointer;
+}
+
+/* the commentary slot ----------------------------------------------------- */
+.tv-note {
+  margin-top: 1.3rem;
+  padding-top: 0.9rem;
+  border-top: 1px solid var(--tv-line);
+  font-size: 0.92rem;
+  line-height: 1.55;
+  opacity: 0.85;
+}
+
+.tv-note.is-empty { display: none; }
+.tv-note p:last-child { margin-bottom: 0; }
+
+/* figures on the how-to-play page ----------------------------------------- */
+.tv-figures {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+}
+
+.tv-figure {
+  flex: 1 1 12rem;
+  max-width: 15rem;
+  margin: 0;
+}
+
+.tv-figure .tv-board { width: 100%; }
+
+.tv-caption {
+  margin: 0.55rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  opacity: 0.75;
+}
+
+@media screen and (max-width: 560px) {
+  .tv-board { width: 100%; }
+  .tv-figure { flex-basis: 100%; max-width: 18rem; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tv-cell { transition: none; }
+}

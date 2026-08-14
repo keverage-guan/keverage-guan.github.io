@@ -8,7 +8,7 @@ permalink: /cv/
   <a class="button" href="{{ '/assets/pdf/kevin_guan_cv.pdf' | relative_url }}">
     Download CV (PDF)
   </a>
-  <span class="cv-updated">Last updated July 2026</span>
+  <span class="cv-updated">Last updated August 2026</span>
 </p>
 
 <object class="cv-embed"
