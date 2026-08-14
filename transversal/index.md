@@ -49,5 +49,3 @@ fills up and neither player has one, the game is a draw.
 win for X, 2 × 2 and 3 × 3 are draws, and for every *n* ≥ 4 the first player wins, and can force
 it by ply 2*n*+3, with their (*n*+2)-nd stone. To understand why, see
 [my paper](https://arxiv.org/abs/2608.13501). The hard computer opponent plays exactly that optimal strategy when it has X, so on a 4 × 4 board or larger, you cannot beat it from the O side.
-
-[Back to Hyperconnections →](/hyperconnections/)
