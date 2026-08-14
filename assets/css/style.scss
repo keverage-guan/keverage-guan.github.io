@@ -201,6 +201,12 @@
   font-size: $small-font-size;
 }
 
+/* Games dropdown in the site nav */
+.nav-dropdown {
+  position: relative;
+  display: inline-block;
+}
+
 .nav-dropdown-toggle {
   cursor: pointer;
   color: $text-color;
