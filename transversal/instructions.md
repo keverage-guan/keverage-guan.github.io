@@ -19,9 +19,7 @@ five different columns.
   <figure id="tv-fig-no"></figure>
 </div>
 
-Only the cells that are in general position count. In the second board X holds five cells,
-but two of them sit in row 4, so the largest set with no repeated line has size four — one
-short.
+In the second board X holds five cells, but two of them sit in row 4, and two of them sit in column 3, so the largest set with no repeated line has size four—one short.
 
 ## Playing the computer
 
@@ -31,7 +29,7 @@ Choose your side and a difficulty. The computer moves after a short pause.
   to stumble into one, and will not notice yours.
 - **Medium** takes a win when one is available and blocks your immediate threat when you have
   one. Otherwise it plays at random. It will not see a double threat coming.
-- **Hard** plays the strategy of the paper below when it has X, and wins by ply 2*n*+3 on
+- **Hard** plays the optimal strategy below when it has X, and wins by ply 2*n*+3 on
   every board of size 4 × 4 or larger no matter how you defend. With O it takes a win,
   blocks immediate threats, denies cells that would give you a double threat, and
   otherwise plays inside the rows and columns you have not touched yet. On the
@@ -60,14 +58,14 @@ in [my paper](https://arxiv.org/abs/2608.13501).
 
   TV.showcase(document.getElementById('tv-fig-yes'), {
     n: 5,
-    x: [[1, 3], [2, 5], [3, 1], [4, 4], [5, 2], [3, 5]],
-    mark: [[1, 3], [2, 5], [3, 1], [4, 4], [5, 2], [3, 5]],
+    x: [[1, 3], [2, 5], [3, 1], [4, 4], [5, 2]],
+    mark: [[1, 3], [2, 5], [3, 1], [4, 4], [5, 2]],
     caption: 'A transversal.'
   });
 
   TV.showcase(document.getElementById('tv-fig-no'), {
     n: 5,
-    x: [[1, 3], [2, 5], [3, 1], [4, 4], [4, 2]],
+    x: [[1, 3], [2, 5], [3, 1], [4, 4], [4, 2], [5, 3]],
     caption: 'Not a transversal.'
   });
 </script>
