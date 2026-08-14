@@ -60,7 +60,6 @@
       mode: opts.mode || 'two',
       human: TV.X,
       level: opts.level || 'medium',
-      showThreats: false
     };
 
     var game = TV.newGame(settings.n);
@@ -120,13 +119,6 @@
     btnNew.type = btnUndo.type = 'button';
     actions.appendChild(btnNew);
     actions.appendChild(btnUndo);
-
-    var threatBox = el('label', 'tv-toggle');
-    var threatInput = document.createElement('input');
-    threatInput.type = 'checkbox';
-    threatBox.appendChild(threatInput);
-    threatBox.appendChild(el('span', null, 'Mark threatened cells'));
-    actions.appendChild(threatBox);
     root.appendChild(actions);
 
     var note = el('div', 'tv-note');
@@ -174,11 +166,6 @@
       var winSet = {};
       (game.winCells || []).forEach(function (i) { winSet[i] = true; });
 
-      var threatSet = {};
-      if (settings.showThreats && !game.over) {
-        TV.threats(game, game.turn).forEach(function (i) { threatSet[i] = true; });
-      }
-
       var frozen = game.over || thinking || (isBot && game.turn !== settings.human);
 
       cellEls.forEach(function (b, i) {
@@ -186,7 +173,6 @@
         b.classList.toggle('is-x', v === TV.X);
         b.classList.toggle('is-o', v === TV.O);
         b.classList.toggle('is-win', !!winSet[i]);
-        b.classList.toggle('is-threat', !!threatSet[i]);
         b.querySelector('.tv-mark').textContent = glyph(v);
         b.disabled = !!v || frozen;
         b.setAttribute('aria-label',
@@ -265,12 +251,7 @@
       settings.level = levelSel.value;
       newGame();
     });
-
-    threatInput.addEventListener('change', function () {
-      settings.showThreats = threatInput.checked;
-      paint();
-    });
-
+    
     btnNew.addEventListener('click', newGame);
 
     btnUndo.addEventListener('click', function () {

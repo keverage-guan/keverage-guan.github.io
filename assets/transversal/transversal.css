@@ -41,6 +41,7 @@
   align-items: center;
   gap: 0.5rem 1.1rem;
   margin-bottom: 1rem;
+  justify-content: center;  
 }
 
 .tv-field {
@@ -72,6 +73,7 @@
   /* Cap the cell size too, so a 1x1 board is a single small square rather than
      one 30rem slab. */
   width: min(100%, 30rem, calc(var(--tv-n, 5) * 4.2rem));
+  margin-inline: auto; 
 }
 
 .tv-cell {
@@ -139,6 +141,7 @@
   min-height: 1.4em;
   margin: 0.9rem 0 0;
   font-size: 0.92rem;
+  text-align: center;     
 }
 
 .tv-status.is-x-turn { color: var(--tv-x); }
@@ -151,6 +154,7 @@
   align-items: center;
   gap: 0.4rem 0.9rem;
   margin-top: 0.9rem;
+  justify-content: center;  
 }
 
 .tv-btn {
@@ -168,14 +172,6 @@
 .tv-btn:disabled { opacity: 0.4; cursor: default; }
 .tv-btn-primary { font-weight: 600; border-width: 2px; }
 
-.tv-toggle {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-size: 0.85rem;
-  opacity: 0.75;
-  cursor: pointer;
-}
 
 /* the commentary slot ----------------------------------------------------- */
 .tv-note {
