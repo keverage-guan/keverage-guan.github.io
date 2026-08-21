@@ -28,7 +28,9 @@
     - Rooweither Mabuya
     - Idris Akinade
     - Christiane Fellbaum
-  note: Under Review
+  status: published
+  year: 2026
+  venue: "Empirical Methods in Natural Language Processing (EMNLP)"
   arxiv: "https://arxiv.org/abs/2606.12708"
 
 - title: "Recovering the Temporal Structure of Drifting Data from Model Weights"
