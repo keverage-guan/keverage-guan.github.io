@@ -1,12 +1,19 @@
-- title: "Evaluating Architectures on High and Low-Resource Languages"
+- title: "Dependency Parsing Across the Resource Spectrum: Evaluating Architectures on High and Low-Resource Languages"
   authors:
     - Kevin Guan
     - Happy Buzaaba
     - Christiane Fellbaum
-  venue: "Language Technologies for Low-Resource Languages (LaTeLL)"
+  venue: "Proceedings of the First International Conference on Language Technologies for Low-resource Languages (LaTeLL 2026), pp. 68–79"
   year: 2026
   status: published
+  pdf: "https://acl-bg.org/proceedings/2026/LaTeLL%202026/pdf/2026.latell-1.9.pdf"
   arxiv: "https://arxiv.org/abs/2605.02608"
+  doi: "https://acl-bg.org/proceedings/2026/LaTeLL%202026/index.html"
+  bibtex: "https://acl-bg.org/proceedings/2026/LaTeLL%202026/bib/2026.latell-1.9.bib"
+  talks:
+    - kind: Talk
+      event: "LaTeLL 2026"
+      date: "September 28, 2026"
 
 - title: "AfriSUD: A Dependency Treebank Collection for Evaluating Models on African Languages"
   authors:
@@ -33,16 +40,22 @@
   venue: "Empirical Methods in Natural Language Processing (EMNLP)"
   arxiv: "https://arxiv.org/abs/2606.12708"
 
-- title: "Recovering the Temporal Structure of Drifting Data from Model Weights"
-  authors:
-    - Kevin Guan
-  note: Under Review
-  arxiv: "https://arxiv.org/abs/2607.27482"
-  code: "https://github.com/keverage-guan/latent_states"
-
 - title: "The transversal achievement game on a square grid"
   authors:
     - Kevin Guan
   note: Under Review
   arxiv: "https://arxiv.org/abs/2608.13501"
   code: "https://github.com/keverage-guan/transversal"
+  talks:
+    - kind: Contributed talk
+      event: "Joint Mathematics Meetings (JMM) 2027"
+      location: "Chicago, IL"
+      date: "January 2027"
+      upcoming: true
+
+- title: "Recovering the Temporal Structure of Drifting Data from Model Weights"
+  authors:
+    - Kevin Guan
+  note: Under Review
+  arxiv: "https://arxiv.org/abs/2607.27482"
+  code: "https://github.com/keverage-guan/latent_states"

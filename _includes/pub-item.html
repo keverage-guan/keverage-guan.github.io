@@ -14,6 +14,15 @@
   {%- if include.pub.note %}
   <div class="pub-note">{{ include.pub.note }}</div>
   {%- endif %}
+  {%- if include.pub.talks %}
+    {%- for t in include.pub.talks %}
+    <div class="pub-talk">
+      {{ t.kind | default: "Talk" }}: {{ t.event }}{% if t.location %}, {{ t.location }}{% endif %}{% if t.date %}, {{ t.date }}{% endif %}
+      {%- if t.upcoming %} <span class="tag">upcoming</span>{% endif %}
+      {%- if t.slides %} · <a href="{% if t.slides contains '://' %}{{ t.slides }}{% else %}{{ t.slides | relative_url }}{% endif %}">slides</a>{% endif %}
+    </div>
+    {%- endfor %}
+  {%- endif %}
   <div class="pub-links">
     {%- if include.pub.pdf %}<a href="{% if include.pub.pdf contains '://' %}{{ include.pub.pdf }}{% else %}{{ include.pub.pdf | relative_url }}{% endif %}">PDF</a>{% endif -%}
     {%- if include.pub.arxiv %}<a href="{{ include.pub.arxiv }}">arXiv</a>{% endif -%}
