@@ -6,10 +6,10 @@
   venue: "Proceedings of the First International Conference on Language Technologies for Low-resource Languages (LaTeLL)"
   year: 2026
   status: published
-  pdf: "https://acl-bg.org/proceedings/2026/LaTeLL%202026/pdf/2026.latell-1.9.pdf"
   arxiv: "https://arxiv.org/abs/2605.02608"
   doi: "https://acl-bg.org/proceedings/2026/LaTeLL%202026/index.html"
   bibtex: "https://acl-bg.org/proceedings/2026/LaTeLL%202026/bib/2026.latell-1.9.bib"
+  slides: /assets/pdf/latell2026_slides.pdf
   talks:
     - event: "Language Technologies for Low-Resource Languages (LaTeLL)"
       year: 2026
