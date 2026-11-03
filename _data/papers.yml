@@ -20,24 +20,27 @@
     - Cheikh Mouhamadou Bamba Dione
     - David Ifeoluwa Adelani
     - Sylvain Kahane
-    - Kim Gerdes
     - Bruno Guillaume
-    - Kevin Guan
-    - Aremu Anuoluwapo
-    - Naome A. Etori
+    - Kim Gerdes
     - Shamsuddeen Hassan Muhammad
+    - Kevin Guan
+    - Anuoluwapo Aremu
+    - Naome A. Etori
     - Utitofon Inyang
     - Peter Nabende
     - David Sabiiti Bamutura
     - Andiswa Bukula
+    - Idris Akinade
     - Chinedu Uchechukwu
     - Rooweither Mabuya
-    - Idris Akinade
     - Christiane Fellbaum
   status: published
   year: 2026
-  venue: "Empirical Methods in Natural Language Processing (EMNLP)"
+  venue: "Proceedings of the 2026 Conference on Empirical Methods in Natural Language Processing"
   arxiv: "https://arxiv.org/abs/2606.12708"
+  anthology: "https://aclanthology.org/2026.emnlp-main.1896/"
+  doi: "https://doi.org/10.18653/2026.emnlp-main.1896"
+  bibtex: "https://aclanthology.org/2026.emnlp-main.1896.bib"
 
 - title: "The transversal achievement game on a square grid"
   authors:
@@ -48,10 +51,3 @@
   talks:
     - event: "Joint Mathematics Meetings (JMM)"
       year: 2027
-
-- title: "Recovering the Temporal Structure of Drifting Data from Model Weights"
-  authors:
-    - Kevin Guan
-  note: Under Review
-  arxiv: "https://arxiv.org/abs/2607.27482"
-  code: "https://github.com/keverage-guan/latent_states"

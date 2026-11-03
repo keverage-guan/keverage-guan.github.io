@@ -19,11 +19,12 @@
   {%- endfor %}
   <div class="pub-links">
     {%- if include.pub.pdf %}<a href="{% if include.pub.pdf contains '://' %}{{ include.pub.pdf }}{% else %}{{ include.pub.pdf | relative_url }}{% endif %}">PDF</a>{% endif -%}
+    {%- if include.pub.anthology %}<a href="{{ include.pub.anthology }}">ACL Anthology</a>{% endif -%}
     {%- if include.pub.arxiv %}<a href="{{ include.pub.arxiv }}">arXiv</a>{% endif -%}
     {%- if include.pub.code %}<a href="{{ include.pub.code }}">Code</a>{% endif -%}
-    {%- if include.pub.doi %}<a href="{{ include.pub.doi }}">Publisher</a>{% endif -%}
+    {%- if include.pub.doi %}<a href="{{ include.pub.doi }}">DOI</a>{% endif -%}
     {%- if include.pub.slides %}<a href="{% if include.pub.slides contains '://' %}{{ include.pub.slides }}{% else %}{{ include.pub.slides | relative_url }}{% endif %}">Slides</a>{% endif -%}
     {%- if include.pub.poster %}<a href="{% if include.pub.poster contains '://' %}{{ include.pub.poster }}{% else %}{{ include.pub.poster | relative_url }}{% endif %}">Poster</a>{% endif -%}
     {%- if include.pub.bibtex %}<a href="{% if include.pub.bibtex contains '://' %}{{ include.pub.bibtex }}{% else %}{{ include.pub.bibtex | relative_url }}{% endif %}">BibTeX</a>{% endif -%}
-  </div>
+</div>
 </li>
