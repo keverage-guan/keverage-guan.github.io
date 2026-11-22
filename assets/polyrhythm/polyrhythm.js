@@ -4,8 +4,7 @@
  *   opts: { leftKey, rightKey   (KeyboardEvent.code, default 'KeyD' / 'KeyK'),
  *           left, right         (beats per cycle for each hand, default 2 / 3),
  *           tempo               (cycles per minute, default 40),
- *           tolerance           (ms either side of the beat, default 60),
- *           mode                ('free' | 'metro') }
+ *           tolerance           (ms either side of the beat, default 60) }
  *
  * One cycle is the span in which the left hand plays `left` evenly spaced beats
  * and the right hand plays `right`; both hands share the downbeat. Every tap is
@@ -13,10 +12,8 @@
  * from that beat, a second tap on the same beat, or a beat that passes with no
  * tap at all ends the streak.
  *
- *   metro  a metronome fixes the grid; one cycle of count-in, then play.
- *   free   no click; your first tap is the downbeat and the grid follows your
- *          tempo (a least-squares fit over your recent taps), so slow drift is
- *          fine but uneven spacing is not.
+ * There is no count-in: your first tap is the downbeat, and from there the grid
+ * runs at the set tempo. After a mistake, the next downbeat you tap restarts it.
  */
 (function (global) {
   'use strict';
@@ -25,11 +22,7 @@
 
   var COUNTS = [1, 2, 3, 4, 5, 6, 7, 8, 9];
   var HAND = ['Left', 'Right'];
-  var LOOKAHEAD_MS = 150;        // how far ahead the metronome is scheduled
-  var TICK_MS = 25;              // scheduler period
-  var LEAD_MS = 300;             // gap between pressing Start and the count-in
-  var FREE_LOCKOUT_MS = 700;     // after an error in free mode, ignore taps this long
-  var FIT_POINTS = 16;           // taps used to fit the tempo in free mode
+  var LOCKOUT_MS = 700;          // after a mistake, ignore taps this long
   var MAX_TAPS_DRAWN = 64;
 
   function el(tag, cls, txt) {
@@ -94,32 +87,27 @@
       n: [opts.left || 2, opts.right || 3],
       tempo: opts.tempo || 40,
       tolerance: opts.tolerance || 60,
-      mode: opts.mode || 'free',
     };
     cfg.labels = [keyLabel(cfg.keys[0]), keyLabel(cfg.keys[1])];
 
     var st = {
       running: false,
-      waiting: false,     // free mode: waiting for a downbeat
+      waiting: false,     // waiting for a downbeat
       fresh: true,        // waiting with no grid yet (draw the static pattern)
       lockUntil: 0,
       frozenAt: 0,
-      countin: false,
       t0: 0,
       T: 60000 / cfg.tempo,
       armed: true,
       next: [0, 0],
       slots: [{}, {}],    // beat index -> 'hit' | 'miss' | 'bad'
       taps: [],
-      fit: [],
-      sched: [0, 0],
       streak: 0,
       best: 0,
       bestLabel: '',
     };
 
     var listening = null;   // hand whose key is being rebound
-    var timer = null;
     var raf = null;
     var actx = null;
 
@@ -169,15 +157,6 @@
       settingsChanged();
     });
 
-    var modeSel = el('select', 'pr-select');
-    addOption(modeSel, 'free', 'Follow me');
-    addOption(modeSel, 'metro', 'Metronome');
-    modeSel.value = cfg.mode;
-    modeSel.addEventListener('change', function () {
-      cfg.mode = modeSel.value;
-      settingsChanged();
-    });
-
     // The ratio and Start live in the toolbar; everything else is in Settings.
     var toolbar = el('div', 'pr-toolbar');
     var ratio = el('div', 'pr-ratio');
@@ -218,7 +197,6 @@
     grid.appendChild(field('Right key', keyBtns[1]));
     grid.appendChild(field('Tempo', tempoIn, 'cycles/min'));
     grid.appendChild(field('Tolerance \u00b1', tolIn, 'ms'));
-    grid.appendChild(field('Timing', modeSel));
     panel.appendChild(grid);
     var meta = el('div', 'pr-meta');
     panel.appendChild(meta);
@@ -327,30 +305,12 @@
       blip(performance.now() + latencyMs(), 140, 0.18, 0.22, 'sawtooth');
     }
 
-    function schedule() {
-      if (!st.running || cfg.mode !== 'metro' || !actx) return;
-      var horizon = performance.now() + LOOKAHEAD_MS + latencyMs();
-      for (var h = 0; h < 2; h++) {
-        var n = cfg.n[h];
-        while (slotTime(h, st.sched[h]) < horizon) {
-          var j = st.sched[h]++;
-          var t = slotTime(h, j);
-          if (mod(j, n) === 0) {
-            if (h === 0) blip(t, 1568, 0.45, 0.07);           // shared downbeat, once
-          } else {
-            blip(t, h === 0 ? 784 : 1175, 0.28, 0.045);       // left low, right high
-          }
-        }
-      }
-    }
-
     /* ---- game flow --------------------------------------------------------- */
     function resetRun() {
       st.armed = true;
       st.next = [0, 0];
       st.slots = [{}, {}];
       st.taps = [];
-      st.fit = [];
       st.streak = 0;
       renderScore();
     }
@@ -361,31 +321,19 @@
       st.running = true;
       st.T = 60000 / cfg.tempo;
       resetRun();
-      if (cfg.mode === 'metro') {
-        st.waiting = false;
-        st.t0 = performance.now() + LEAD_MS + latencyMs() + st.T;   // one cycle of count-in
-        st.sched = [-cfg.n[0], -cfg.n[1]];
-        st.countin = true;
-        say('Count-in… come in on the downbeat.', '');
-        timer = setInterval(schedule, TICK_MS);
-        schedule();
-      } else {
-        st.waiting = true;
-        st.fresh = true;
-        st.lockUntil = 0;
-        say('Tap the downbeat — both hands together — to begin.', '');
-      }
+      st.waiting = true;
+      st.fresh = true;
+      st.lockUntil = 0;
+      say('Tap the downbeat \u2014 both hands together \u2014 to begin.', '');
       startBtn.textContent = 'Stop';
       kick();
     }
 
     function stop() {
-      if (timer) { clearInterval(timer); timer = null; }
       if (raf) { cancelAnimationFrame(raf); raf = null; }
       var was = st.running;
       st.running = false;
       st.waiting = false;
-      st.countin = false;
       st.streak = 0;
       st.taps = [];
       st.slots = [{}, {}];
@@ -398,18 +346,14 @@
     }
 
     function fail(t, msg) {
-        st.streak = 0;
+      st.streak = 0;
       st.armed = false;
+      st.waiting = true;
+      st.fresh = false;
+      st.frozenAt = t;
+      st.lockUntil = t + LOCKOUT_MS;
       renderScore();
-      var tail = '';
-      if (cfg.mode === 'free') {
-        st.waiting = true;
-        st.fresh = false;
-        st.frozenAt = t;
-        st.lockUntil = t + FREE_LOCKOUT_MS;
-        tail = ' Tap a downbeat to restart.';
-      }
-      say(msg + tail, 'error');
+      say(msg + ' Tap a downbeat to restart.', 'error');
       flashError();
       buzz();
     }
@@ -430,43 +374,11 @@
       }
     }
 
-    // Free mode: fit t = t0 + T·p to the recent taps, p being the beat's
-    // position in cycles. With too narrow a spread of p, only shift the phase.
-    function refit() {
-      var pts = st.fit, k = pts.length;
-      if (!k) return;
-      var mp = 0, mt = 0, lo = Infinity, hi = -Infinity, i;
-      for (i = 0; i < k; i++) {
-        mp += pts[i].p; mt += pts[i].t;
-        lo = Math.min(lo, pts[i].p); hi = Math.max(hi, pts[i].p);
-      }
-      mp /= k; mt /= k;
-      var T = st.T;
-      if (k >= 3 && hi - lo >= 0.5) {
-        var sxx = 0, sxy = 0;
-        for (i = 0; i < k; i++) {
-          var dp = pts[i].p - mp;
-          sxx += dp * dp;
-          sxy += dp * (pts[i].t - mt);
-        }
-        if (sxx > 0) {
-          T = sxy / sxx;
-          T = Math.min(st.T * 1.15, Math.max(st.T / 1.15, T));   // no lurches
-          T = Math.min(10000, Math.max(200, T));
-        }
-      }
-      st.T = T;
-      st.t0 = mt - T * mp;
-    }
-
     function onTap(h, t) {
       flashPad(h);
       audio();
 
-      if (!st.running) {
-        if (cfg.mode === 'free') start();
-        else { say('Press Start (or Space) to begin.', ''); return; }
-      }
+      if (!st.running) start();
 
       if (st.waiting) {
         if (t < st.lockUntil) return;
@@ -483,7 +395,7 @@
       var n = cfg.n[h];
       var tol = tolMs();
       var j = Math.round((t - st.t0) / st.T * n);
-      if (j < 0) return;      // still in the count-in
+      if (j < 0) return;
 
       var err = t - slotTime(h, j);
       var tap = { h: h, t: t, ok: false };
@@ -504,17 +416,7 @@
       st.slots[h][j] = 'hit';
       tap.ok = true;
 
-      if (!st.armed) {
-        // Back in after an error: require beats from here on, not the ones
-        // that went by while you were finding your place.
-        st.armed = true;
-        var o = 1 - h;
-        st.next[h] = j + 1;
-        st.next[o] = Math.floor((t - st.t0) / st.T * cfg.n[o]) + 1;
-        say(status.textContent, '');     // keep the message, drop the red
-      } else {
-        st.next[h] = Math.max(st.next[h], j + 1);
-      }
+      st.next[h] = Math.max(st.next[h], j + 1);
 
       st.streak++;
       if (st.streak > st.best) {
@@ -522,11 +424,6 @@
         st.bestLabel = cfg.n[0] + ':' + cfg.n[1];
       }
 
-      if (cfg.mode === 'free') {
-        st.fit.push({ p: j / n, t: t });
-        if (st.fit.length > FIT_POINTS) st.fit.shift();
-        refit();
-      }
       renderScore();
     }
 
@@ -588,9 +485,7 @@
       stop();
       st.T = 60000 / cfg.tempo;
       updateMeta();
-      say(cfg.mode === 'metro'
-        ? 'Press Start or Space. One cycle of count-in, then go.'
-        : 'Press Start or just tap the downbeat to begin.', '');
+      say('Tap the downbeat \u2014 both hands together \u2014 to begin.', '');
       draw();
     }
 
@@ -691,9 +586,8 @@
           var x = lanes[h], y = Y(t);
           var r = mod(j, n) === 0 ? 10 : 7.5;
           var state = live ? st.slots[h][j] : null;
-          var countin = live && cfg.mode === 'metro' && j < 0;
-          var stale = live && !state && t < view && !countin;
-          g.globalAlpha = countin ? 0.3 : (stale ? 0.35 : 1);
+          var stale = live && !state && t < view;
+          g.globalAlpha = stale ? 0.35 : 1;
           g.beginPath();
           g.arc(x, y, r, 0, 2 * Math.PI);
           if (state === 'hit') {
@@ -747,10 +641,6 @@
       raf = null;
       if (!st.running) { draw(); return; }
       var now = performance.now();
-      if (st.countin && now >= st.t0 - tolMs()) {
-        st.countin = false;
-        if (status.textContent.indexOf('Count-in') === 0) say(' ', '');
-      }
       checkMisses(now);
       draw(now);
       raf = requestAnimationFrame(frame);
@@ -811,9 +701,7 @@
     refreshKeys();
     updateMeta();
     renderScore();
-    say(cfg.mode === 'metro'
-      ? 'Press Start or Space. One cycle of count-in, then go.'
-      : 'Press Start or just tap the downbeat to begin.', '');
+    say('Tap the downbeat \u2014 both hands together \u2014 to begin.', '');
     draw();
 
     return { start: start, stop: stop, _state: st, _cfg: cfg };
