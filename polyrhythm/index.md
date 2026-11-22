@@ -21,8 +21,7 @@ to your streak. An early or late tap, an extra tap or a missed beat resets it.
     right: 3,
     tempo: 40,       // cycles per minute
     tolerance: 60,   // ms either side of the beat
-    mode: 'metro',   // 'metro' or 'free'
-    click: 'all'     // 'all', 'down' or 'off'
+    mode: 'free'     // 'free' (follow me) or 'metro' (metronome)
   });
 </script>
 
@@ -33,14 +32,13 @@ beats and the right hand plays its own, evenly spaced; the tempo is in cycles pe
 minute. Each tap is matched to the nearest beat of its own hand. The streak counts
 taps, so a shared downbeat is worth two.
 
-**Metronome** fixes the grid and gives you one cycle of count-in. The click can
-sound every beat (low for the left hand, high for the right), only the downbeat,
-or nothing at all once the count-in is over. After a mistake the metronome keeps
-going, so just come back in.
+**Follow me** (the default) has no click. Your first tap is the downbeat, and the
+grid follows your own tempo, so you can drift slowly but your spacing still has to
+stay even. After a mistake, tap a fresh downbeat to start again.
 
-**Follow me** has no click. Your first tap is the downbeat, and the grid follows
-your own tempo, so you can drift slowly but your spacing still has to stay even.
-After a mistake, tap a fresh downbeat to start again.
+**Metronome** fixes the grid, gives you one cycle of count-in, and clicks every
+beat, low for the left hand and high for the right. After a mistake the click
+keeps going, so just come back in.
 
 Wired headphones or speakers work best. Bluetooth audio can lag by a noticeable
 fraction of a second, and not every browser reports that delay.

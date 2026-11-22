@@ -5,8 +5,7 @@
  *           left, right         (beats per cycle for each hand, default 2 / 3),
  *           tempo               (cycles per minute, default 40),
  *           tolerance           (ms either side of the beat, default 60),
- *           mode                ('metro' | 'free'),
- *           click               ('all' | 'down' | 'off') }
+ *           mode                ('free' | 'metro') }
  *
  * One cycle is the span in which the left hand plays `left` evenly spaced beats
  * and the right hand plays `right`; both hands share the downbeat. Every tap is
@@ -95,8 +94,7 @@
       n: [opts.left || 2, opts.right || 3],
       tempo: opts.tempo || 40,
       tolerance: opts.tolerance || 60,
-      mode: opts.mode || 'metro',
-      click: opts.click || 'all',
+      mode: opts.mode || 'free',
     };
     cfg.labels = [keyLabel(cfg.keys[0]), keyLabel(cfg.keys[1])];
 
@@ -172,21 +170,11 @@
     });
 
     var modeSel = el('select', 'pr-select');
-    addOption(modeSel, 'metro', 'Metronome');
     addOption(modeSel, 'free', 'Follow me');
+    addOption(modeSel, 'metro', 'Metronome');
     modeSel.value = cfg.mode;
     modeSel.addEventListener('change', function () {
       cfg.mode = modeSel.value;
-      settingsChanged();
-    });
-
-    var clickSel = el('select', 'pr-select');
-    addOption(clickSel, 'all', 'Every beat');
-    addOption(clickSel, 'down', 'Downbeat only');
-    addOption(clickSel, 'off', 'Off');
-    clickSel.value = cfg.click;
-    clickSel.addEventListener('change', function () {
-      cfg.click = clickSel.value;
       settingsChanged();
     });
 
@@ -226,13 +214,11 @@
     });
 
     var grid = el('div', 'pr-settings-grid');
-    var clickField = field('Click', clickSel);
     grid.appendChild(field('Left key', keyBtns[0]));
     grid.appendChild(field('Right key', keyBtns[1]));
     grid.appendChild(field('Tempo', tempoIn, 'cycles/min'));
     grid.appendChild(field('Tolerance \u00b1', tolIn, 'ms'));
     grid.appendChild(field('Timing', modeSel));
-    grid.appendChild(clickField);
     panel.appendChild(grid);
     var meta = el('div', 'pr-meta');
     panel.appendChild(meta);
@@ -280,10 +266,14 @@
       return p;
     });
 
-    stage.appendChild(scores);
-    stage.appendChild(canvas);
-    stage.appendChild(status);
-    stage.appendChild(pads);
+    var track = el('div', 'pr-track');
+    track.appendChild(canvas);
+    track.appendChild(pads);
+    var side = el('div', 'pr-side');
+    side.appendChild(scores);
+    side.appendChild(status);
+    stage.appendChild(track);
+    stage.appendChild(side);
 
     root.appendChild(controls);
     root.appendChild(stage);
@@ -345,12 +335,9 @@
         while (slotTime(h, st.sched[h]) < horizon) {
           var j = st.sched[h]++;
           var t = slotTime(h, j);
-          // The count-in is always audible, even with the click turned off.
-          var click = j < 0 ? (cfg.click === 'down' ? 'down' : 'all') : cfg.click;
-          if (click === 'off') continue;
           if (mod(j, n) === 0) {
             if (h === 0) blip(t, 1568, 0.45, 0.07);           // shared downbeat, once
-          } else if (click === 'all') {
+          } else {
             blip(t, h === 0 ? 784 : 1175, 0.28, 0.045);       // left low, right high
           }
         }
@@ -411,17 +398,16 @@
     }
 
     function fail(t, msg) {
-      var lost = st.streak;
-      st.streak = 0;
+        st.streak = 0;
       st.armed = false;
       renderScore();
-      var tail = lost ? ' Streak of ' + lost + ' lost.' : '';
+      var tail = '';
       if (cfg.mode === 'free') {
         st.waiting = true;
         st.fresh = false;
         st.frozenAt = t;
         st.lockUntil = t + FREE_LOCKOUT_MS;
-        tail += ' Tap a downbeat to go again.';
+        tail = ' Tap a downbeat to restart.';
       }
       say(msg + tail, 'error');
       flashError();
@@ -596,7 +582,6 @@
         txt += ' · tolerance capped at ±' + Math.max(5, cap) + ' ms at this tempo';
       }
       meta.textContent = txt;
-      clickField.classList.toggle('is-hidden', cfg.mode !== 'metro');
     }
 
     function settingsChanged() {
@@ -628,10 +613,12 @@
       else if (mq.addListener) mq.addListener(onScheme);
     }
 
-    var CANVAS_H = 150;
+    // Time runs down the page: beats fall from the top toward the hit line,
+    // with the left hand in the left column and the right hand in the right.
+    var CANVAS_H = 340;
     function draw(now) {
       var dpr = global.devicePixelRatio || 1;
-      var w = canvas.clientWidth || 600;
+      var w = canvas.clientWidth || 300;
       var hgt = CANVAS_H;
       if (canvas.width !== Math.round(w * dpr) || canvas.height !== Math.round(hgt * dpr)) {
         canvas.width = Math.round(w * dpr);
@@ -652,42 +639,44 @@
         t0 = st.t0; T = st.T; view = now != null ? now : performance.now(); live = true;
       }
 
-      var padL = 64, padR = 14;
-      var plotW = Math.max(50, w - padL - padR);
-      var W = 1.5 * T;                       // visible span: half a cycle back, a cycle ahead
+      var top = 6, labelH = 26, bottom = hgt - labelH;
+      var plotH = bottom - top;
+      var W = 1.5 * T;                      // a cycle ahead (above), half a cycle behind (below)
       var tStart = view - W / 3;
-      var X = function (t) { return padL + (t - tStart) / W * plotW; };
-      var lanes = [hgt * 0.3, hgt * 0.72];
+      var Y = function (t) { return bottom - (t - tStart) / W * plotH; };
+      var lanes = [w * 0.27, w * 0.73];
+      var half = Math.min(60, w * 0.16);    // half-width of a lane's tick
 
-      // lanes and labels
+      // lanes and key labels
       g.lineWidth = 1;
       g.strokeStyle = colors.line;
       g.font = '600 13px system-ui, -apple-system, sans-serif';
+      g.textAlign = 'center';
       g.textBaseline = 'middle';
       for (var h = 0; h < 2; h++) {
         g.beginPath();
-        g.moveTo(padL - 6, lanes[h]);
-        g.lineTo(w - padR + 6, lanes[h]);
+        g.moveTo(lanes[h], top);
+        g.lineTo(lanes[h], bottom);
         g.stroke();
         g.fillStyle = colors.hand[h];
-        g.fillText(HAND[h][0] + ' · ' + cfg.labels[h], 8, lanes[h]);
+        g.fillText(HAND[h] + ' · ' + cfg.labels[h], lanes[h], hgt - labelH / 2);
       }
 
       g.save();
       g.beginPath();
-      g.rect(padL - 12, 0, plotW + 24, hgt);
+      g.rect(0, top - 2, w, plotH + 4);
       g.clip();
 
-      // a faint bar line at each downbeat
+      // a faint line at each downbeat
       var c0 = Math.floor((tStart - t0) / T) - 1;
       var c1 = Math.ceil((tStart + W - t0) / T) + 1;
       g.strokeStyle = colors.line;
       g.setLineDash([3, 4]);
       for (var c = c0; c <= c1; c++) {
-        var bx = X(t0 + c * T);
+        var by = Y(t0 + c * T);
         g.beginPath();
-        g.moveTo(bx, 10);
-        g.lineTo(bx, hgt - 10);
+        g.moveTo(10, by);
+        g.lineTo(w - 10, by);
         g.stroke();
       }
       g.setLineDash([]);
@@ -699,8 +688,8 @@
         var j1 = Math.ceil((tStart + W - t0) / T * n) + 1;
         for (var j = j0; j <= j1; j++) {
           var t = t0 + T * j / n;
-          var x = X(t), y = lanes[h];
-          var r = mod(j, n) === 0 ? 8.5 : 6.5;
+          var x = lanes[h], y = Y(t);
+          var r = mod(j, n) === 0 ? 10 : 7.5;
           var state = live ? st.slots[h][j] : null;
           var countin = live && cfg.mode === 'metro' && j < 0;
           var stale = live && !state && t < view && !countin;
@@ -731,24 +720,24 @@
       if (live) {
         g.lineWidth = 2.5;
         st.taps.forEach(function (tp) {
-          var tx = X(tp.t);
-          if (tx < padL - 12 || tx > w) return;
+          var ty = Y(tp.t);
+          if (ty < top - 2 || ty > bottom + 2) return;
           g.strokeStyle = tp.ok ? colors.hand[tp.h] : colors.bad;
           g.beginPath();
-          g.moveTo(tx, lanes[tp.h] - 17);
-          g.lineTo(tx, lanes[tp.h] + 17);
+          g.moveTo(lanes[tp.h] - half, ty);
+          g.lineTo(lanes[tp.h] + half, ty);
           g.stroke();
         });
       }
 
-      // playhead
-      var px = X(view);
+      // the hit line
+      var py = Y(view);
       g.strokeStyle = colors.text;
       g.globalAlpha = 0.65;
       g.lineWidth = 1.5;
       g.beginPath();
-      g.moveTo(px, 4);
-      g.lineTo(px, hgt - 4);
+      g.moveTo(4, py);
+      g.lineTo(w - 4, py);
       g.stroke();
       g.globalAlpha = 1;
       g.restore();
