@@ -190,48 +190,83 @@
       settingsChanged();
     });
 
-    var row1 = el('div', 'pr-row');
-    row1.appendChild(field('Left key', keyBtns[0]));
-    row1.appendChild(field('Left beats', countSels[0]));
-    row1.appendChild(field('Right beats', countSels[1]));
-    row1.appendChild(field('Right key', keyBtns[1]));
+    // The ratio and Start live in the toolbar; everything else is in Settings.
+    var toolbar = el('div', 'pr-toolbar');
+    var ratio = el('div', 'pr-ratio');
+    ratio.appendChild(countSels[0]);
+    ratio.appendChild(el('span', 'pr-ratio-sep', 'against'));
+    ratio.appendChild(countSels[1]);
+    countSels[0].setAttribute('aria-label', 'Left-hand beats per cycle');
+    countSels[1].setAttribute('aria-label', 'Right-hand beats per cycle');
 
+    var startBtn = el('button', 'pr-btn pr-btn-primary', 'Start');
+    startBtn.type = 'button';
+    startBtn.addEventListener('click', function () {
+      startBtn.blur();
+      if (st.running) stop(); else start();
+    });
+
+    var gearBtn = el('button', 'pr-btn pr-btn-quiet', 'Settings');
+    gearBtn.type = 'button';
+    gearBtn.setAttribute('aria-expanded', 'false');
+
+    var toolEnd = el('div', 'pr-toolbar-end');
+    toolEnd.appendChild(startBtn);
+    toolEnd.appendChild(gearBtn);
+    toolbar.appendChild(ratio);
+    toolbar.appendChild(toolEnd);
+
+    var panel = el('div', 'pr-settings');
+    panel.hidden = true;
+    gearBtn.addEventListener('click', function () {
+      gearBtn.blur();
+      panel.hidden = !panel.hidden;
+      gearBtn.setAttribute('aria-expanded', String(!panel.hidden));
+      gearBtn.classList.toggle('is-on', !panel.hidden);
+    });
+
+    var grid = el('div', 'pr-settings-grid');
     var clickField = field('Click', clickSel);
-    var row2 = el('div', 'pr-row');
-    row2.appendChild(field('Tempo', tempoIn, 'cycles/min'));
-    row2.appendChild(field('Tolerance ±', tolIn, 'ms'));
-    row2.appendChild(field('Timing', modeSel));
-    row2.appendChild(clickField);
-
-    controls.appendChild(row1);
-    controls.appendChild(row2);
-
+    grid.appendChild(field('Left key', keyBtns[0]));
+    grid.appendChild(field('Right key', keyBtns[1]));
+    grid.appendChild(field('Tempo', tempoIn, 'cycles/min'));
+    grid.appendChild(field('Tolerance \u00b1', tolIn, 'ms'));
+    grid.appendChild(field('Timing', modeSel));
+    grid.appendChild(clickField);
+    panel.appendChild(grid);
     var meta = el('div', 'pr-meta');
+    panel.appendChild(meta);
+    panel.appendChild(el('div', 'pr-meta', 'Space starts and stops \u00b7 Esc stops'));
+
+    controls.appendChild(toolbar);
+    controls.appendChild(panel);
 
     /* ---- stage ------------------------------------------------------------- */
     var stage = el('div', 'pr-stage');
 
     var scores = el('div', 'pr-scores');
-    var streakBox = el('div', 'pr-score pr-score-main');
-    var streakNum = el('div', 'pr-score-num', '0');
-    streakBox.appendChild(streakNum);
-    streakBox.appendChild(el('div', 'pr-score-label', 'streak'));
-    var bestBox = el('div', 'pr-score');
-    var bestNum = el('div', 'pr-score-num', '0');
-    var bestLbl = el('div', 'pr-score-label', 'best this session');
-    bestBox.appendChild(bestNum);
-    bestBox.appendChild(bestLbl);
-    scores.appendChild(streakBox);
-    scores.appendChild(bestBox);
+    function score(label) {
+      var box = el('div', 'pr-score');
+      var num = el('div', 'pr-score-num', '0');
+      var lbl = el('div', 'pr-score-label', label);
+      box.appendChild(num);
+      box.appendChild(lbl);
+      scores.appendChild(box);
+      return { num: num, lbl: lbl };
+    }
+    var streakS = score('streak');
+    var bestS = score('best');
+    var streakNum = streakS.num, bestNum = bestS.num, bestLbl = bestS.lbl;
+    streakS.num.parentNode.classList.add('pr-score-streak');
 
     var status = el('div', 'pr-status');
     status.setAttribute('role', 'status');
     status.setAttribute('aria-live', 'polite');
-    var offset = el('div', 'pr-offset', ' ');
 
     var canvas = el('canvas', 'pr-canvas');
     canvas.setAttribute('aria-hidden', 'true');
 
+    // Tap pads, shown only on touch screens (see the CSS).
     var pads = el('div', 'pr-pads');
     var padEls = [0, 1].map(function (h) {
       var p = el('button', 'pr-pad pr-pad-' + (h ? 'right' : 'left'));
@@ -245,26 +280,13 @@
       return p;
     });
 
-    var actions = el('div', 'pr-actions');
-    var startBtn = el('button', 'pr-btn pr-btn-primary', 'Start');
-    startBtn.type = 'button';
-    startBtn.addEventListener('click', function () {
-      startBtn.blur();
-      if (st.running) stop(); else start();
-    });
-    actions.appendChild(startBtn);
-    actions.appendChild(el('span', 'pr-hint', 'Space to start or stop · Esc to stop'));
-
     stage.appendChild(scores);
-    stage.appendChild(status);
-    stage.appendChild(offset);
     stage.appendChild(canvas);
+    stage.appendChild(status);
     stage.appendChild(pads);
 
     root.appendChild(controls);
-    root.appendChild(meta);
     root.appendChild(stage);
-    root.appendChild(actions);
 
     /* ---- timing helpers ---------------------------------------------------- */
     function maxN() { return Math.max(cfg.n[0], cfg.n[1]); }
@@ -366,7 +388,6 @@
         st.lockUntil = 0;
         say('Tap the downbeat — both hands together — to begin.', '');
       }
-      offset.textContent = ' ';
       startBtn.textContent = 'Stop';
       kick();
     }
@@ -385,7 +406,6 @@
       startBtn.textContent = 'Start';
       if (was) {
         say('Stopped.', '');
-        offset.textContent = ' ';
       }
       draw();
     }
@@ -513,17 +533,14 @@
       st.streak++;
       if (st.streak > st.best) {
         st.best = st.streak;
-        st.bestLabel = cfg.n[0] + ' : ' + cfg.n[1];
+        st.bestLabel = cfg.n[0] + ':' + cfg.n[1];
       }
 
-      var info = HAND[h] + '  ' + (err >= 0 ? '+' : '−') + Math.abs(Math.round(err)) + ' ms';
       if (cfg.mode === 'free') {
         st.fit.push({ p: j / n, t: t });
         if (st.fit.length > FIT_POINTS) st.fit.shift();
         refit();
-        info += '  ·  tempo ≈ ' + Math.round(60000 / st.T) + '/min';
       }
-      offset.textContent = info;
       renderScore();
     }
 
@@ -536,7 +553,7 @@
     function renderScore() {
       streakNum.textContent = String(st.streak);
       bestNum.textContent = String(st.best);
-      bestLbl.textContent = st.best ? 'best this session (' + st.bestLabel + ')' : 'best this session';
+      bestLbl.textContent = st.best ? 'best (' + st.bestLabel + ')' : 'best';
     }
 
     function flashError() {
@@ -587,7 +604,7 @@
       st.T = 60000 / cfg.tempo;
       updateMeta();
       say(cfg.mode === 'metro'
-        ? 'Press Start (or Space). You get one cycle of count-in.'
+        ? 'Press Start or Space. One cycle of count-in, then go.'
         : 'Press Start or just tap the downbeat to begin.', '');
       draw();
     }
@@ -806,7 +823,7 @@
     updateMeta();
     renderScore();
     say(cfg.mode === 'metro'
-      ? 'Press Start (or Space). You get one cycle of count-in.'
+      ? 'Press Start or Space. One cycle of count-in, then go.'
       : 'Press Start or just tap the downbeat to begin.', '');
     draw();
 
