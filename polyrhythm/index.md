@@ -18,15 +18,6 @@ Play one rhythm with your left hand and another with your right, both starting o
     left: 2,
     right: 3,
     tempo: 40,       // cycles per minute
-    tolerance: 60,   // ms either side of the beat
-    mode: 'free'     // 'free' (follow me) or 'metro' (metronome)
+    tolerance: 60    // ms either side of the beat
   });
 </script>
-
----
-
-**Follow me** (the default) has no click. Your first tap is the downbeat, and the
-grid follows your own tempo, so you can drift slowly but your spacing still has to
-stay even. After a mistake, tap a fresh downbeat to start again.
-
-**Metronome** fixes the grid and gives you one cycle of count-in. After a mistake the metronome keeps going, so just come back in.
